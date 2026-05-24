@@ -150,7 +150,7 @@ body::before {
 .section-rule { flex:1; height:1px; background:linear-gradient(90deg, var(--gold-dim), transparent); }
 
 /* PROSE */
-p { margin-bottom: 1.2em; color: var(--text); font-size: 16px; }
+p { margin-bottom: 1.2em; color: var(--text); font-size: 18px; }
 p:last-child { margin-bottom: 0; }
 em { color: var(--gold-light); font-style: italic; }
 strong { color: var(--silver); font-weight: 600; }
@@ -171,7 +171,7 @@ strong { color: var(--silver); font-weight: 600; }
   content:''; position:absolute; top:0; left:-1px; bottom:0; width:2px;
   background: linear-gradient(to bottom, transparent, var(--gold), transparent);
 }
-.callout p { font-style:italic; color:var(--silver); font-size:15px; margin:0; }
+.callout p { font-style:italic; color:var(--silver); font-size:18px; margin:0; }
 
 /* PATRONS GRID */
 .patrons-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin:24px 0; }
@@ -187,17 +187,17 @@ strong { color: var(--silver); font-weight: 600; }
 }
 .patron-card:hover { border-color:var(--gold-dim); background:rgba(201,168,76,0.05); }
 .patron-card:hover::before { opacity:1; }
-.patron-name { font-family:'Cinzel',serif; font-size:12px; font-weight:600; letter-spacing:0.1em; color:var(--gold); margin-bottom:4px; text-transform:uppercase; }
+.patron-name { font-family:'Cinzel',serif; font-size:16px; font-weight:600; letter-spacing:0.1em; color:var(--gold); margin-bottom:4px; text-transform:uppercase; }
 .patron-desc { font-size:12px; font-style:italic; color:var(--text-dim); line-height:1.5; }
 
 /* HIERARCHY TABLE */
 .hierarchy { width:100%; border-collapse:collapse; margin:24px 0; font-size:14px; }
-.hierarchy th { font-family:'Cinzel',serif; font-size:10px; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold-dim); text-align:left; padding:8px 14px; border-bottom:1px solid var(--border); background:var(--panel); }
+.hierarchy th { font-family:'Cinzel',serif; font-size:16px; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold-dim); text-align:left; padding:8px 14px; border-bottom:1px solid var(--border); background:var(--panel); }
 .hierarchy td { padding:10px 14px; border-bottom:1px solid rgba(42,48,69,0.5); vertical-align:top; }
 .hierarchy tr:last-child td { border-bottom:none; }
 .hierarchy tr:hover td { background:rgba(201,168,76,0.03); }
-.rank-name { font-family:'Cinzel',serif; font-size:13px; color:var(--gold-light); }
-.rank-lat { font-style:italic; color:var(--text-dim); font-size:11px; display:block; }
+.rank-name { font-family:'Cinzel',serif; font-size:16px; color:var(--gold-light); }
+.rank-lat { font-style:italic; color:var(--text-dim); font-size:16px; display:block; }
 
 /* TENETS */
 .tenets-list { list-style:none; padding:0; counter-reset:tenet; }
@@ -224,17 +224,17 @@ strong { color: var(--silver); font-weight: 600; }
   flex-shrink:0; position:relative; z-index:1;
 }
 .tenet-body { position:relative; z-index:1; }
-.tenet-title { font-family:'Cinzel',serif; font-size:14px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--silver); margin-bottom:6px; }
-.tenet-latin { font-style:italic; font-size:12px; color:var(--gold-dim); margin-bottom:10px; display:block; }
-.tenet-text { font-size:15px; color:var(--text); margin:0; line-height:1.7; }
+.tenet-title { font-family:'Cinzel',serif; font-size:16px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--silver); margin-bottom:6px; }
+.tenet-latin { font-style:italic; font-size:16px; color:var(--gold-dim); margin-bottom:10px; display:block; }
+.tenet-text { font-size:16px; color:var(--text); margin:0; line-height:1.7; }
 .tenet-penalty {
   margin-top:10px; padding:8px 12px;
   border-left:2px solid var(--red); background:rgba(139,32,32,0.08);
-  font-size:13px; font-style:italic; color:var(--silver-dim);
+  font-size:16px; font-style:italic; color:var(--silver-dim);
 }
 .tenet-penalty::before {
   content:'Pena: '; font-family:'Cinzel',serif; font-style:normal;
-  color:var(--red-glow); font-size:11px; letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--red-glow); font-size:16px; letter-spacing:0.15em; text-transform:uppercase;
 }
 
 /* DIVIDER */
@@ -247,10 +247,10 @@ strong { color: var(--silver); font-weight: 600; }
   border:1px solid var(--gold-dim); background:var(--panel);
   padding:32px 36px; margin:32px 0; position:relative; text-align:center;
 }
-.oath-block::before, .oath-block::after { content:'✦'; position:absolute; font-size:10px; color:var(--gold-dim); }
+.oath-block::before, .oath-block::after { content:'✦'; position:absolute; font-size:16px; color:var(--gold-dim); }
 .oath-block::before { top:10px; left:50%; transform:translateX(-50%); }
 .oath-block::after  { bottom:10px; left:50%; transform:translateX(-50%); }
-.oath-text { font-family:'IM Fell English',serif; font-style:italic; font-size:18px; color:var(--gold-light); line-height:1.85; text-shadow:0 0 20px rgba(201,168,76,0.2); }
+.oath-text { font-family:'IM Fell English',serif; font-style:italic; font-size:24px; color:var(--gold-light); line-height:1.85; text-shadow:0 0 20px rgba(201,168,76,0.2); }
 
 /* WAX SEAL */
 .wax-seal {
@@ -427,19 +427,19 @@ strong { color: var(--silver); font-weight: 600; }
           <td><span class="rank-name">I</span></td>
           <td><span class="rank-name">Neófito</span></td>
           <td><span class="rank-lat">Neophytus</span></td>
-          <td style="font-size:13px;color:#8a8070;">Recém-iniciado. Conhece os Mandamentos, mas ainda não tem acesso ao arquivo. Opera sempre supervisionado.</td>
+          <td style="font-size:16px;color:#8a8070;">Recém-iniciado. Conhece os Mandamentos, mas ainda não tem acesso ao arquivo. Opera sempre supervisionado.</td>
         </tr>
         <tr>
           <td><span class="rank-name">II</span></td>
           <td><span class="rank-name">Vigil</span></td>
           <td><span class="rank-lat">Vigilis</span></td>
-          <td style="font-size:13px;color:#8a8070;">Agente de campo certificado. Pode conduzir investigações independentes. Acesso ao arquivo de Grau I.</td>
+          <td style="font-size:16px;color:#8a8070;">Agente de campo certificado. Pode conduzir investigações independentes. Acesso ao arquivo de Grau I.</td>
         </tr>
         <tr>
           <td><span class="rank-name">III</span></td>
           <td><span class="rank-name">Executor</span></td>
           <td><span class="rank-lat">Executor Arcani</span></td>
-          <td style="font-size:13px;color:#8a8070;">Agente com autoridade para aplicar sanções e conduzir supressões. Acesso ao arquivo de Grau II.</td>
+          <td style="font-size:16px;color:#8a8070;">Agente com autoridade para aplicar sanções e conduzir supressões. Acesso ao arquivo de Grau II.</td>
         </tr>
         <tr>
           <td><span class="rank-name">IV</span></td>
@@ -451,7 +451,7 @@ strong { color: var(--silver); font-weight: 600; }
           <td><span class="rank-name">V</span></td>
           <td><span class="rank-name">Arconte</span></td>
           <td><span class="rank-lat">Archon Perpetuus</span></td>
-          <td style="font-size:13px;color:#8a8070;">Voz votante na Arcana Magna. Guardiões dos Mandamentos. Menos de vinte no mundo inteiro.</td>
+          <td style="font-size:16px;color:#8a8070;">Voz votante na Arcana Magna. Guardiões dos Mandamentos. Menos de vinte no mundo inteiro.</td>
         </tr>
       </tbody>
     </table>
