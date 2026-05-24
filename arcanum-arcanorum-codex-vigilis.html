@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arcanum Arcanorum — Codex Primarius</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap');
+
+:root {
+  --void:       #07080a;
+  --deep:       #0d0f14;
+  --surface:    #12151c;
+  --panel:      #181c26;
+  --border:     #2a3045;
+  --border-glow:#3d4a6e;
+  --gold:       #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-dim:   #7a5e28;
+  --silver:     #8fa3bb;
+  --silver-dim: #4a5a6e;
+  --text:       #d4cfc6;
+  --text-dim:   #8a8070;
+  --red:        #8b2020;
+  --red-glow:   #c03030;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 16px;
+  line-height: 1.75;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 15% 20%, rgba(201,168,76,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 8%,  rgba(143,163,187,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 43% 55%, rgba(201,168,76,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 41%, rgba(143,163,187,0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 5%  80%, rgba(201,168,76,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 90%, rgba(143,163,187,0.1) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 65%, rgba(201,168,76,0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 95% 75%, rgba(143,163,187,0.2) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrapper {
+  position: relative; z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* COVER */
+.cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 0 80px;
+  position: relative;
+}
+
+.sigil-ring {
+  width: 260px; height: 260px;
+  margin: 0 auto 32px;
+  position: relative;
+  animation: rotateSlow 60s linear infinite;
+}
+@keyframes rotateSlow { to { transform: rotate(360deg); } }
+
+.sigil-ring > svg { width: 100%; height: 100%; filter: drop-shadow(0 0 18px rgba(201,168,76,0.35)); }
+
+.sigil-center {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  animation: rotateSlow 60s linear infinite reverse;
+}
+
+.sigil-center svg { width: 56px; height: 56px; flex-shrink: 0; }
+
+.sigil-center-wax {
+  animation: none; !important
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: 56px; height: 56px; flex-shrink: 0;
+  fill: #1b0606; !important
+}
+
+
+.cover-supertitle {
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase;
+  color: var(--gold-dim); margin-bottom: 16px;
+}
+.cover-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(28px, 5vw, 46px); font-weight: 700;
+  color: var(--gold-light); line-height: 1.15;
+  text-shadow: 0 0 40px rgba(201,168,76,0.4), 0 2px 4px rgba(0,0,0,0.8);
+  margin-bottom: 8px;
+}
+.cover-subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--silver); margin-bottom: 32px;
+}
+.cover-rule {
+  width: 200px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), var(--gold), var(--gold-dim), transparent);
+  margin: 0 auto 32px;
+}
+.cover-seal {
+  font-family: 'Cinzel', serif; font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--silver-dim); font-style: italic; line-height: 2;
+}
+.cover-scroll-hint {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  font-family: 'Cinzel', serif; font-size: 8px;
+  letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-dim);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:0.9} }
+
+/* SECTIONS */
+.section { margin-bottom: 64px; opacity: 0; transform: translateY(24px); animation: fadeUp 0.8s ease forwards; }
+.section:nth-child(2) { animation-delay:0.1s; }
+.section:nth-child(3) { animation-delay:0.2s; }
+.section:nth-child(4) { animation-delay:0.3s; }
+.section:nth-child(5) { animation-delay:0.4s; }
+.section:nth-child(6) { animation-delay:0.5s; }
+@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+.section-header { display:flex; align-items:center; gap:16px; margin-bottom:24px; }
+.section-number { font-family:'Cinzel Decorative',serif; font-size:11px; color:var(--gold-dim); letter-spacing:0.2em; white-space:nowrap; padding-top:2px; }
+.section-title { font-family:'Cinzel',serif; font-size:clamp(16px,2.5vw,22px); font-weight:600; color:var(--gold-light); letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap; }
+.section-rule { flex:1; height:1px; background:linear-gradient(90deg, var(--gold-dim), transparent); }
+
+/* PROSE */
+p { margin-bottom: 1.2em; color: var(--text); font-size: 16px; }
+p:last-child { margin-bottom: 0; }
+em { color: var(--gold-light); font-style: italic; }
+strong { color: var(--silver); font-weight: 600; }
+
+.dropcap::first-letter {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 4em; font-weight: 700; color: var(--gold);
+  float: left; line-height: 0.75; margin: 6px 8px 0 0;
+  text-shadow: 0 0 20px rgba(201,168,76,0.5);
+}
+
+.callout {
+  border-left: 2px solid var(--gold-dim);
+  background: rgba(201,168,76,0.04);
+  padding: 16px 20px; margin: 24px 0; position: relative;
+}
+.callout::before {
+  content:''; position:absolute; top:0; left:-1px; bottom:0; width:2px;
+  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+}
+.callout p { font-style:italic; color:var(--silver); font-size:15px; margin:0; }
+
+/* PATRONS GRID */
+.patrons-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin:24px 0; }
+.patron-card {
+  border:1px solid var(--border); background:var(--panel);
+  padding:14px 16px; position:relative; overflow:hidden;
+  transition: border-color 0.3s, background 0.3s;
+}
+.patron-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  opacity:0; transition:opacity 0.3s;
+}
+.patron-card:hover { border-color:var(--gold-dim); background:rgba(201,168,76,0.05); }
+.patron-card:hover::before { opacity:1; }
+.patron-name { font-family:'Cinzel',serif; font-size:12px; font-weight:600; letter-spacing:0.1em; color:var(--gold); margin-bottom:4px; text-transform:uppercase; }
+.patron-desc { font-size:12px; font-style:italic; color:var(--text-dim); line-height:1.5; }
+
+/* HIERARCHY TABLE */
+.hierarchy { width:100%; border-collapse:collapse; margin:24px 0; font-size:14px; }
+.hierarchy th { font-family:'Cinzel',serif; font-size:10px; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold-dim); text-align:left; padding:8px 14px; border-bottom:1px solid var(--border); background:var(--panel); }
+.hierarchy td { padding:10px 14px; border-bottom:1px solid rgba(42,48,69,0.5); vertical-align:top; }
+.hierarchy tr:last-child td { border-bottom:none; }
+.hierarchy tr:hover td { background:rgba(201,168,76,0.03); }
+.rank-name { font-family:'Cinzel',serif; font-size:13px; color:var(--gold-light); }
+.rank-lat { font-style:italic; color:var(--text-dim); font-size:11px; display:block; }
+
+/* TENETS */
+.tenets-list { list-style:none; padding:0; counter-reset:tenet; }
+.tenet-item {
+  counter-increment: tenet;
+  display:grid; grid-template-columns:56px 1fr; gap:20px; align-items:start;
+  margin-bottom:28px; padding:20px;
+  border:1px solid var(--border); background:var(--panel);
+  position:relative; overflow:hidden; transition:border-color 0.3s;
+}
+.tenet-item::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(201,168,76,0.04) 0%, transparent 60%);
+  pointer-events:none;
+}
+.tenet-item:hover { border-color:var(--border-glow); }
+.tenet-item.blood { border-color:var(--red); background:rgba(139,32,32,0.07); }
+.tenet-item.blood:hover { border-color:var(--red-glow); }
+.tenet-item.blood .tenet-num { color:var(--red-glow); border-color:var(--red); }
+.tenet-num {
+  font-family:'Cinzel Decorative',serif; font-size:22px; font-weight:700; color:var(--gold);
+  border:1px solid var(--gold-dim); width:56px; height:56px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; position:relative; z-index:1;
+}
+.tenet-body { position:relative; z-index:1; }
+.tenet-title { font-family:'Cinzel',serif; font-size:14px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--silver); margin-bottom:6px; }
+.tenet-latin { font-style:italic; font-size:12px; color:var(--gold-dim); margin-bottom:10px; display:block; }
+.tenet-text { font-size:15px; color:var(--text); margin:0; line-height:1.7; }
+.tenet-penalty {
+  margin-top:10px; padding:8px 12px;
+  border-left:2px solid var(--red); background:rgba(139,32,32,0.08);
+  font-size:13px; font-style:italic; color:var(--silver-dim);
+}
+.tenet-penalty::before {
+  content:'Pena: '; font-family:'Cinzel',serif; font-style:normal;
+  color:var(--red-glow); font-size:11px; letter-spacing:0.15em; text-transform:uppercase;
+}
+
+/* DIVIDER */
+.divider { display:flex; align-items:center; gap:16px; margin:48px 0; color:var(--gold-dim); font-size:14px; letter-spacing:0.3em; }
+.divider::before, .divider::after { content:''; flex:1; height:1px; background:linear-gradient(90deg, transparent, var(--gold-dim)); }
+.divider::after { background:linear-gradient(90deg, var(--gold-dim), transparent); }
+
+/* OATH */
+.oath-block {
+  border:1px solid var(--gold-dim); background:var(--panel);
+  padding:32px 36px; margin:32px 0; position:relative; text-align:center;
+}
+.oath-block::before, .oath-block::after { content:'✦'; position:absolute; font-size:10px; color:var(--gold-dim); }
+.oath-block::before { top:10px; left:50%; transform:translateX(-50%); }
+.oath-block::after  { bottom:10px; left:50%; transform:translateX(-50%); }
+.oath-text { font-family:'IM Fell English',serif; font-style:italic; font-size:18px; color:var(--gold-light); line-height:1.85; text-shadow:0 0 20px rgba(201,168,76,0.2); }
+
+/* WAX SEAL */
+.wax-seal {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:80px; height:80px; border-radius:50%;
+  background:radial-gradient(circle at 40% 35%, #c03030, #8b2020 60%, #4a0f0f);
+  box-shadow:0 4px 20px rgba(139,32,32,0.5), inset 0 1px 2px rgba(255,255,255,0.1);
+  font-size:32px; margin:0 auto 16px; position:relative;
+}
+.wax-seal::after { content:''; position:absolute; inset:3px; border-radius:50%; border:1px solid rgba(255,255,255,0.08); }
+
+/* FOOTER */
+.doc-footer {
+  text-align:center; padding:40px 0 20px;
+  border-top:1px solid var(--border);
+  font-family:'Cinzel',serif; font-size:9px; letter-spacing:0.35em;
+  text-transform:uppercase; color:var(--text-dim);
+}
+
+/* SCROLL PROGRESS */
+.scroll-progress {
+  position:fixed; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--gold), #2a8a7a);
+  transform-origin:left; transform:scaleX(0); z-index:100;
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="progress"></div>
+
+<div class="wrapper">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="sigil-ring">
+      <svg viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="130" cy="130" r="124" stroke="#c9a84c" stroke-width="1" stroke-dasharray="6 4" opacity="0.5"/>
+        <circle cx="130" cy="130" r="106" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+        <polygon points="130,20 234,198 26,198" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.55"/>
+        <circle cx="130" cy="130" r="42" stroke="#c9a84c" stroke-width="1" opacity="0.6"/>
+        <g stroke="#c9a84c" stroke-width="0.8" opacity="0.4">
+          <line x1="130" y1="6"   x2="130" y2="16"/>
+          <line x1="130" y1="244" x2="130" y2="254"/>
+          <line x1="6"   y1="130" x2="16"  y2="130"/>
+          <line x1="244" y1="130" x2="254" y2="130"/>
+          <line x1="37"  y1="37"  x2="44"  y2="44"/>
+          <line x1="223" y1="37"  x2="216" y2="44"/>
+          <line x1="37"  y1="223" x2="44"  y2="216"/>
+          <line x1="223" y1="223" x2="216" y2="216"/>
+        </g>
+        <circle cx="130" cy="20"  r="3" fill="#c9a84c" opacity="0.7"/>
+        <circle cx="234" cy="198" r="3" fill="#c9a84c" opacity="0.7"/>
+        <circle cx="26"  cy="198" r="3" fill="#c9a84c" opacity="0.7"/>
+      </svg>
+      <div class="sigil-center">
+        <svg width="92" height="92" viewBox="0 0 92 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 16,46 C 24,30 34,22 46,22 C 58,22 68,30 76,46 C 68,62 58,70 46,70 C 34,70 24,62 16,46 Z"
+                fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+          <circle cx="46" cy="46" r="13" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+          <circle cx="46" cy="46" r="6" fill="#c9a84c"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="cover-supertitle">Codex Primarius · Sub Sigillo</div>
+    <div class="cover-title">Arcanum<br>Arcanorum</div>
+    <div class="cover-subtitle">O Segredo dos Segredos</div>
+    <div class="cover-rule"></div>
+    <div class="cover-seal">
+      Este documento é propriedade exclusiva da Ordem<br>
+      A posse não-autorizada constitui violação dos Tenets<br>
+      <em>Quod scis, tene. Quod non scis, quaere.</em>
+    </div>
+    <div class="cover-scroll-hint">▾ &nbsp; rolar para ler &nbsp; ▾</div>
+  </div>
+
+  <!-- I. ORIGEM -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">I</span>
+      <span class="section-title">Da Origem &amp; Propósito</span>
+      <div class="section-rule"></div>
+    </div>
+
+    <p class="dropcap">Há muito tempo antes que os impérios se erguessem e antes que a escrita fosse inventada para registrar os erros da humanidade, os primeiros praticantes das artes arcanas já haviam compreendido uma verdade fundamental: <em>o poder sem freio é a forma mais lenta de suicídio coletivo.</em> Quando o mundo ainda era jovem e a magia, abundante, os grandes feiticeiros da antiguidade viram civilizações inteiras obliteradas não por invasores ou catástrofes naturais, mas pela própria ambição dos seus magos.</p>
+
+    <p>A história oficial do Arcanum Arcanorum começa no ano de <strong>1119 d.C.</strong>, quando sete representantes de tradições mágicas distintas e rivais se reuniram em segredo durante as Cruzadas, nas câmaras subterrâneas de um templo em Acre. Eles vinham de diferentes fés, diferentes continentes, diferentes filosofias — e compartilhavam apenas uma convicção: que o segredo estava escapando das mãos daqueles que deveriam guardá-lo.</p>
+
+    <div class="callout">
+      <p>"Não nos reunimos para unificar a magia. Reunimo-nos para acorrentá-la — a nós mesmos antes de tudo. Pois a corrente que não pode prender o mago não pode prender ninguém."</p>
+    </div>
+
+    <p>O que começou como um pacto de não-agressão entre facções rivais evoluiu, ao longo de séculos, para a mais complexa e influente estrutura de governança oculta da história humana. O <em>Arcanum Arcanorum</em> — o Segredo dos Segredos — não é uma ordem como as demais. Não possui um líder supremo, não exige uniformidade de crença, não impõe uma única visão de mundo. É, em essência, uma <strong>constituição viva</strong>: um acordo entre poderes que de outra forma se destruiriam mutuamente.</p>
+
+    <p>Sua missão, enunciada no preâmbulo do <em>Codex Primarius</em>, permanece inalterada desde a fundação: <em>regular, preservar e, quando necessário, suprimir</em> o conhecimento e o uso da magia no mundo, de modo que a humanidade continue existindo para eventualmente merecer o que recebeu.</p>
+  </div>
+
+  <!-- II. ARCANA MAGNA -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">II</span>
+      <span class="section-title">A Arcana Magna</span>
+      <div class="section-rule"></div>
+    </div>
+
+    <p>O Arcanum Arcanorum não é sustentado por uma única organização. Sua força deriva precisamente da sua natureza <em>confederada</em>: dezenas de poderes independentes, frequentemente rivais em suas esferas de influência, convergem sob o mesmo teto institucional para tratar daquilo que a todos afeta. Esse conselho deliberativo se chama <strong>Arcana Magna</strong> — o Grande Arcano.</p>
+
+    <p>Cada organização signatária cede uma fração de sua soberania ao assinar o <em>Foedus Perpetuum</em> — o Pacto Perpétuo. Em troca, recebe o direito de voto nas deliberações da Arcana Magna, acesso ao arquivo central de conhecimento mágico e, mais precioso que tudo, <strong>imunidade às operações de supressão</strong> da própria Ordem. Os que não assinam não possuem essa proteção.</p>
+
+    <div class="patrons-grid">
+      <div class="patron-card">
+        <div class="patron-name">Templários</div>
+        <div class="patron-desc">Herdeiros da tradição de Salomão. Guardiões de relíquias e geometria sagrada. Voto de ferro, memória de pedra.</div>
+      </div>
+      <div class="patron-card">
+        <div class="patron-name">Illuminati</div>
+        <div class="patron-desc">Racionalistas do oculto. Creem que magia é ciência ainda não catalogada. Influência profunda nas academias e nos Estados.</div>
+      </div>
+      <div class="patron-card">
+        <div class="patron-name">Ordem de Dagon</div>
+        <div class="patron-desc">Cultistas das profundezas. Conhecimentos de magia aquática e vínculos com entidades pré-humanas. Membros inconstantes, lealdade suspeita.</div>
+      </div>
+      <div class="patron-card">
+        <div class="patron-name">Igreja Católica Apostólica Romana</div>
+        <div class="patron-desc">O maior financiador individual. Participa sob a doutrina do <em>mysterium fidei</em>. Mantém exorcistas e inquisidores com credenciais da Ordem.</div>
+      </div>
+      <div class="patron-card">
+        <div class="patron-name">Hellfire Club</div>
+        <div class="patron-desc">Aristocratas libertinos com acesso profundo a redes de influência mundana. Especialistas em magia Carmim e vínculos demoníacos controlados.</div>
+      </div>
+      <div class="patron-card">
+        <div class="patron-name">Covens Independentes</div>
+        <div class="patron-desc">Representados por delegados rotacionais. Vozes da tradição oral e da magia natural. Frequentemente a consciência moral do Conselho.</div>
+      </div>
+      <div class="patron-card">
+        <div class="patron-name">Círculos Druídicos</div>
+        <div class="patron-desc">Guardiões do equilíbrio entre magia e natureza. Inegociáveis em matérias ambientais. Possuem o mais antigo arquivo de magia natural do mundo.</div>
+      </div>
+      <div class="patron-card">
+        <div class="patron-name">Outros Signatários</div>
+        <div class="patron-desc">Logias maçônicas orientais, academias herméticas, confrarias alquimistas, ordens sufi e diversas tradições xamânicas continentais.</div>
+      </div>
+    </div>
+
+    <p>A Arcana Magna se reúne formalmente a cada solstício e equinócio, em locais que variam a cada sessão e são comunicados apenas com 72 horas de antecedência. Decisões exigem maioria qualificada de dois terços para resoluções ordinárias e unanimidade para alterações aos <em>Tenets Fundamentais</em>. Esta última condição não foi satisfeita desde 1487, o que significa, na prática, que os Tenets são imutáveis.</p>
+
+    <div class="callout">
+      <p>A Arcana Magna não governa suas organizações membros. Governa apenas aquilo que todas possuem em comum: o acesso ao oculto e a responsabilidade que dele decorre.</p>
+    </div>
+  </div>
+
+  <!-- III. HIERARQUIA -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">III</span>
+      <span class="section-title">Hierarquia &amp; Graus</span>
+      <div class="section-rule"></div>
+    </div>
+
+    <p>O Arcanum Arcanorum reconhece cinco graus de iniciação para os membros operativos — aqueles que trabalham diretamente em nome da Ordem. É neste papel que os agentes jogadores se enquadram. Cada grau carrega deveres e prerrogativas específicos, e o acesso ao arquivo central é progressivamente expandido conforme se avança.</p>
+
+    <table class="hierarchy">
+      <thead>
+        <tr>
+          <th>Grau</th>
+          <th>Título</th>
+          <th>Designação Latina</th>
+          <th>Papel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rank-name">I</span></td>
+          <td><span class="rank-name">Neófito</span></td>
+          <td><span class="rank-lat">Neophytus</span></td>
+          <td style="font-size:13px;color:#8a8070;">Recém-iniciado. Conhece os Tenets, mas ainda não tem acesso ao arquivo. Opera sempre supervisionado.</td>
+        </tr>
+        <tr>
+          <td><span class="rank-name">II</span></td>
+          <td><span class="rank-name">Vigil</span></td>
+          <td><span class="rank-lat">Vigilis</span></td>
+          <td style="font-size:13px;color:#8a8070;">Agente de campo certificado. Pode conduzir investigações independentes. Acesso ao arquivo de Grau I.</td>
+        </tr>
+        <tr>
+          <td><span class="rank-name">III</span></td>
+          <td><span class="rank-name">Executor</span></td>
+          <td><span class="rank-lat">Executor Arcani</span></td>
+          <td style="font-size:13px;color:#8a8070;">Agente com autoridade para aplicar sanções e conduzir supressões. Acesso ao arquivo de Grau II.</td>
+        </tr>
+        <tr>
+          <td><span class="rank-name">IV</span></td>
+          <td><span class="rank-name">Custódio</span></td>
+          <td><span class="rank-lat">Custos Secreti</span></td>
+          <td style="font-size:13px;color:#8a8070;">Supervisor regional. Coordena equipes de Vigis e Executores. Assento consultivo na Arcana Magna.</td>
+        </tr>
+        <tr>
+          <td><span class="rank-name">V</span></td>
+          <td><span class="rank-name">Arconte</span></td>
+          <td><span class="rank-lat">Archon Perpetuus</span></td>
+          <td style="font-size:13px;color:#8a8070;">Voz votante na Arcana Magna. Guardiões dos Tenets. Menos de vinte no mundo inteiro.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Os personagens jogadores iniciam como <em>Vigis</em> recém-promovidos ou como <em>Neófitos</em> em sua primeira missão de campo. A Ordem os enxerga como ativos valiosos, mas ainda não-provados. A confiança se constrói com resultados — e se perde com uma única violação dos Tenets.</p>
+  </div>
+
+  <!-- IV. TENETS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">IV</span>
+      <span class="section-title">Os Tenets Fundamentais</span>
+      <div class="section-rule"></div>
+    </div>
+
+    <p>Os Tenets são as leis supremas do Arcanum Arcanorum. Não são diretrizes interpretáveis nem políticas sujeitas a revisão contextual. São o substrato sobre o qual o Pacto Perpétuo foi construído — e sua violação constitui não apenas uma infração disciplinar, mas uma ruptura do próprio tecido que mantém a Ordem coesa.</p>
+
+    <div class="callout">
+      <p>Nenhum membro da Ordem pode alegar ignorância dos Tenets após sua iniciação. O juramento de iniciação os incorpora formalmente à consciência moral do iniciado. <em>Qui scit et tacet, consentit</em> — quem sabe e cala, consente.</p>
+    </div>
+
+    <ul class="tenets-list">
+
+      <li class="tenet-item blood">
+        <div class="tenet-num">I</div>
+        <div class="tenet-body">
+          <div class="tenet-title">O Véu deve permanecer</div>
+          <span class="tenet-latin">Velum Manet — "O Véu Permanece"</span>
+          <p class="tenet-text">O conhecimento da existência da magia, das suas mecânicas e das organizações que a regulam não pode ser revelado a não-iniciados. Isso inclui demonstrações públicas deliberadas, confissões sob coerção, registros escritos não-cifrados e qualquer forma de prova tangível entregue voluntariamente ao mundo exterior. A existência de praticantes individuais pode ser revelada apenas em contextos controlados e com aprovação de um Custódio.</p>
+          <div class="tenet-penalty">Expulsão imediata da Ordem com perda de todas as proteções. Em casos de vazamento verificado ao público em larga escala: execução por sentença da Arcana Magna.</div>
+        </div>
+      </li>
+
+      <li class="tenet-item blood">
+        <div class="tenet-num">II</div>
+        <div class="tenet-body">
+          <div class="tenet-title">Proibição de Armas de Extinção</div>
+          <span class="tenet-latin">Lex Ultima — "A Lei Última"</span>
+          <p class="tenet-text">Nenhum membro pode desenvolver, usar ou facilitar o uso de magias com potencial de extinção em massa — feitiços capazes de eliminar populações inteiras, alterar permanentemente a consciência coletiva de uma sociedade, ou destruir linhas ley de forma irreversível. Esta proibição se aplica mesmo que o alvo seja considerado ameaça à própria Ordem. Há outros meios. Sempre.</p>
+          <div class="tenet-penalty">Morte imediata autorizada por qualquer Executor ou superior presente. Sem julgamento. Sem apelação.</div>
+        </div>
+      </li>
+
+      <li class="tenet-item">
+        <div class="tenet-num">III</div>
+        <div class="tenet-body">
+          <div class="tenet-title">Proibição de Controle Permanente</div>
+          <span class="tenet-latin">Libertas Mentis — "Liberdade da Mente"</span>
+          <p class="tenet-text">Nenhum membro pode aplicar efeitos mágicos permanentes ou de longa duração sobre a vontade ou memória de outro ser consciente sem consentimento explícito. Encantamentos de curta duração em contexto de combate ou missão autorizada são permitidos. Alterações permanentes de personalidade, apagamento de memórias extenso ou escravidão mental constituem violação deste Tenet, independentemente da justificativa apresentada.</p>
+          <div class="tenet-penalty">Suspensão imediata e julgamento pela Arcana Magna. Pena varia de expulsão à execução conforme extensão do dano.</div>
+        </div>
+      </li>
+
+      <li class="tenet-item">
+        <div class="tenet-num">IV</div>
+        <div class="tenet-body">
+          <div class="tenet-title">Dever de Reporte</div>
+          <span class="tenet-latin">Omnia Referre — "Reportar Tudo"</span>
+          <p class="tenet-text">Todo membro que tomar conhecimento de uma violação dos Tenets — por outro membro, por organização signatária ou por agente externo — possui obrigação imediata de reportar ao superior mais próximo ou diretamente à Arcana Magna. Encobrir violações, mesmo por lealdade a colegas ou superiores diretos, constitui cumplicidade e é julgado com a mesma severidade da violação original.</p>
+          <div class="tenet-penalty">Cumplicidade equiparada à violação original. Rebaixamento mínimo de dois graus hierárquicos.</div>
+        </div>
+      </li>
+
+      <li class="tenet-item">
+        <div class="tenet-num">V</div>
+        <div class="tenet-body">
+          <div class="tenet-title">Proibição de Comércio de Conhecimento</div>
+          <span class="tenet-latin">Scientia Non Venditur — "O Conhecimento Não se Vende"</span>
+          <p class="tenet-text">O arquivo central do Arcanum Arcanorum e qualquer conhecimento obtido em função do cargo não pode ser comercializado, leiloado, trocado por favores pessoais ou cedido sem autorização formal. Conhecimentos mágicos de alto grau — especialmente aqueles relacionados a Domínios Arcanos — são tratados como propriedade da Ordem, não do praticante individual. Pesquisa original pode ser registrada pelo autor, mas permanece sob custódia da Ordem.</p>
+          <div class="tenet-penalty">Confisco imediato do material. Suspensão e julgamento. Reincidência resulta em expulsão.</div>
+        </div>
+      </li>
+
+      <li class="tenet-item">
+        <div class="tenet-num">VI</div>
+        <div class="tenet-body">
+          <div class="tenet-title">Proteção dos Não-Praticantes</div>
+          <span class="tenet-latin">Custodi Ignaros — "Protege os Ignorantes"</span>
+          <p class="tenet-text">Não-praticantes que por acidente tomem conhecimento parcial da existência da magia devem ser tratados com o protocolo mínimo de amnésia temporária e realocação quando necessário. O uso de força letal contra não-praticantes como solução preferencial para contenção de informação é proibido. Toda vida tirada para proteger o Véu deve ser justificada documentalmente perante um Custódio em até 48 horas.</p>
+          <div class="tenet-penalty">Uso não-justificado de força letal resulta em suspensão e julgamento. O ônus da prova recai sobre o membro que agiu.</div>
+        </div>
+      </li>
+
+      <li class="tenet-item">
+        <div class="tenet-num">VII</div>
+        <div class="tenet-body">
+          <div class="tenet-title">Neutralidade entre os Signatários</div>
+          <span class="tenet-latin">Pax Arcana — "A Paz Arcana"</span>
+          <p class="tenet-text">Um membro do Arcanum Arcanorum não pode usar recursos, autoridade ou conhecimentos obtidos em função da Ordem para favorecer ou prejudicar uma organização signatária em detrimento de outra. Conflitos entre signatários que extrapolem suas esferas e afetem o Véu ou a segurança pública mágica devem ser reportados à Arcana Magna para mediação.</p>
+          <div class="tenet-penalty">Rebaixamento de grau e auditoria completa das ações do membro. Em casos de conflito armado facilitado: expulsão.</div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- V. JURAMENTO -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">V</span>
+      <span class="section-title">O Juramento de Iniciação</span>
+      <div class="section-rule"></div>
+    </div>
+
+    <p>Todo membro operativo, independente do grau ou organização de origem, profere o seguinte juramento no momento de sua iniciação formal. O juramento é pronunciado em latim, na presença de ao menos um Custódio, e vinculado magicamente à assinatura do iniciado no <em>Liber Foederis</em> — o Livro do Pacto.</p>
+
+    <p>Diz-se que a assinatura deixa uma marca no campo mágico do praticante, perceptível por qualquer Executor treinado. Diz-se também que aqueles que rompem o juramento sentem o peso disso — literal e imediatamente.</p>
+
+    <div class="oath-block">
+      <div class="oath-text">
+        Juro guardar o Véu que separa os que sabem dos que não sabem.<br>
+        Juro não vender o que aprendi nem revelar o que descobri.<br>
+        Juro que o poder a mim concedido servirá à preservação — não à dominação.<br>
+        Juro reportar o que vejo e responder pelo que faço.<br>
+        Juro que o mundo continuará existindo depois de mim.<br><br>
+        <em>Quod promitto, facio.<br>
+        Quod facio, respondo.<br>
+        Quod sum, ero — intra fines quos nunc amplector.</em>
+      </div>
+    </div>
+
+    <div class="divider">✦</div>
+
+    <div style="text-align:center;margin-bottom:16px;">
+      <div class="wax-seal">
+      <div class="sigil-center-wax">
+        <svg width="92" height="92" viewBox="0 0 92 92" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 16,46 C 24,30 34,22 46,22 C 58,22 68,30 76,46 C 68,62 58,70 46,70 C 34,70 24,62 16,46 Z"
+                fill="none" stroke="#6f1919" stroke-width="5"/>
+          <circle cx="46" cy="46" r="13" fill="none" stroke="#6f1919" stroke-width="5"/>
+        </svg>
+      </div>
+    </div>
+
+    <p style="text-align:center;font-style:italic;color:var(--text-dim);font-size:14px;">
+      Este documento foi aprovado pela Arcana Magna para distribuição a membros de Grau I e acima.<br>
+      Sua destruição após leitura é recomendada, mas não obrigatória.<br>
+      <em>Sua memorização, contudo, é.</em>
+    </p>
+  </div>
+
+  <div class="doc-footer">
+    Arcanum Arcanorum &nbsp;·&nbsp; Codex Primarius &nbsp;·&nbsp; Sub Sigillo Perpetuo<br>
+    <span style="opacity:0.5;margin-top:4px;display:block;">Omnia quae hic scripta sunt, scripta manent</span>
+  </div>
+
+</div>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const el = document.getElementById('progress');
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    el.style.transform = 'scaleX(' + pct + ')';
+  });
+</script>
+</body>
+</html>
