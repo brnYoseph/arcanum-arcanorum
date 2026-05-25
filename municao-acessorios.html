@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Munição, Carregadores & Acessórios — D10/0</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --bg:          #0a0b0d;
+  --surface:     #111318;
+  --panel:       #161920;
+  --border:      #22262f;
+  --border-hi:   #353c4a;
+  --text:        #c8cdd8;
+  --text-dim:    #5a6070;
+  --text-mono:   #7a9a7a;
+  --accent:      #c9a84c;
+  --accent-dim:  #5a4a20;
+  --red:         #c03838;
+  --red-dim:     #4a1818;
+  --green:       #4a8a5a;
+  --silver:      #8fa3bb;
+
+  --cat-ammo:      #6a8a5a;
+  --cat-mag:       #5a7a9a;
+  --cat-optics:    #8a7a5a;
+  --cat-tactical:  #7a5a8a;
+  --cat-misc:      #6a6a5a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px
+  );
+}
+
+.page { position: relative; z-index: 1; max-width: 1060px; margin: 0 auto; padding: 0 20px 60px; }
+
+/* ── HEADER ── */
+header {
+  border-bottom: 1px solid var(--border);
+  padding: 36px 0 24px;
+  margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 24px;
+}
+
+.doc-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+h1 {
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #e8e4dc;
+  line-height: 1;
+}
+
+h1 span { color: var(--accent); }
+
+.header-meta {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  line-height: 2;
+  text-align: right;
+}
+
+/* ── CALIBER INDEX ── */
+.caliber-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 36px;
+}
+
+.cal-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  padding: 4px 8px;
+  border: 1px solid var(--border-hi);
+  color: var(--text-dim);
+  background: var(--panel);
+  letter-spacing: 0.1em;
+  cursor: default;
+  transition: color 0.2s, border-color 0.2s;
+}
+.cal-tag:hover { color: var(--accent); border-color: var(--accent-dim); }
+
+/* ── CATEGORY SECTION ── */
+.cat-section { margin-bottom: 48px; }
+
+.cat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cat-pip { width: 8px; height: 8px; flex-shrink: 0; }
+.cat-title { font-size: 11px; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase; flex: 1; }
+.cat-count { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); }
+
+.cat-ammo    .cat-pip { background: var(--cat-ammo); }
+.cat-ammo    .cat-title { color: var(--cat-ammo); }
+.cat-mag     .cat-pip { background: var(--cat-mag); }
+.cat-mag     .cat-title { color: var(--cat-mag); }
+.cat-optics  .cat-pip { background: var(--cat-optics); }
+.cat-optics  .cat-title { color: var(--cat-optics); }
+.cat-tactical .cat-pip { background: var(--cat-tactical); }
+.cat-tactical .cat-title { color: var(--cat-tactical); }
+.cat-misc    .cat-pip { background: var(--cat-misc); }
+.cat-misc    .cat-title { color: var(--cat-misc); }
+
+/* ── TABLE ── */
+.eq-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+
+.eq-table thead tr { background: var(--surface); }
+
+.eq-table th {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-hi);
+  white-space: nowrap;
+  font-weight: 400;
+}
+.eq-table th.r { text-align: right; }
+.eq-table th.c { text-align: center; }
+
+.eq-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.eq-table tr:last-child td { border-bottom: none; }
+.eq-table tr:hover td { background: rgba(255,255,255,0.02); }
+tr.featured td { background: rgba(201,168,76,0.03); }
+
+.item-name { font-size: 15px; font-weight: 600; color: #ddd8cc; letter-spacing: 0.02em; }
+.item-sub { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); margin-top: 1px; }
+
+td.mono { font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--text-mono); }
+td.r    { text-align: right; }
+td.c    { text-align: center; }
+
+td.cost {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  text-align: right;
+  white-space: nowrap;
+}
+
+td.effect {
+  font-size: 12px;
+  color: var(--silver);
+  font-style: italic;
+}
+
+td.notes {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-style: italic;
+  max-width: 240px;
+}
+
+/* compatibility badges */
+.compat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  padding: 1px 5px;
+  border: 1px solid var(--border-hi);
+  color: var(--text-dim);
+  background: var(--surface);
+  white-space: nowrap;
+}
+.badge.hi { border-color: var(--accent-dim); color: var(--accent); }
+
+/* damage mod tag */
+.dmg-mod {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.dmg-up   { color: #d4884a; }
+.dmg-down { color: var(--text-mono); }
+.dmg-neu  { color: var(--text-dim); }
+
+/* ── RULE ── */
+.rule { height: 1px; background: var(--border); margin: 0 0 40px; }
+
+/* ── FOOTNOTES ── */
+.footnotes {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.fn-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--accent-dim); margin-bottom: 10px;
+  padding-bottom: 6px; border-bottom: 1px solid var(--border);
+}
+.fn-row { display: flex; gap: 10px; margin-bottom: 5px; font-size: 13px; align-items: baseline; }
+.fn-key { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent); min-width: 90px; flex-shrink: 0; }
+.fn-val { color: var(--text-dim); }
+
+/* legality flag */
+.flag-legal   { color: var(--text-mono); font-size: 10px; font-family: 'Share Tech Mono', monospace; }
+.flag-illegal { color: var(--red);       font-size: 10px; font-family: 'Share Tech Mono', monospace; }
+.flag-gray    { color: #8a7a5a;          font-size: 10px; font-family: 'Share Tech Mono', monospace; }
+
+@media (max-width: 700px) {
+  .footnotes { grid-template-columns: 1fr; }
+  header { grid-template-columns: 1fr; }
+  .header-meta { text-align: left; }
+  td.notes { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div>
+      <div class="doc-tag">D10/0 System · Arcanum Arcanorum · Suplemento de Campo — Vol. II</div>
+      <h1>Munição, Carregadores <span>&amp;</span> Acessórios</h1>
+      <div style="font-size:13px;color:var(--text-dim);margin-top:6px;font-style:italic;">
+        Preços de referência em R$ · Base: mercado brasileiro, mai/2026 · Valores civis; mercado negro ×3 a ×8
+      </div>
+    </div>
+    <div class="header-meta">
+      REV 1.0 · ARCANUM ARCANORUM<br>
+      CLASSIFICAÇÃO: VIGILIS+<br>
+      ACESSO: GRAU I
+    </div>
+  </header>
+
+  <!-- CALIBER INDEX -->
+  <div class="caliber-index">
+    <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:0.2em;align-self:center;">CALIBRES COBERTOS ▸</span>
+    <span class="cal-tag">.38 SPL</span>
+    <span class="cal-tag">9mm</span>
+    <span class="cal-tag">.45 ACP</span>
+    <span class="cal-tag">.44 Mag</span>
+    <span class="cal-tag">5.56mm</span>
+    <span class="cal-tag">.308 Win</span>
+    <span class="cal-tag">7.62×39</span>
+    <span class="cal-tag">7.62×51</span>
+    <span class="cal-tag">.50 BMG</span>
+    <span class="cal-tag">12ga</span>
+    <span class="cal-tag">Flechas</span>
+    <span class="cal-tag">40mm</span>
+  </div>
+
+  <!-- ══════════ MUNIÇÃO ══════════ -->
+  <div class="cat-section cat-ammo">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Munição — caixas padrão</div>
+      <div class="cat-count">14 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Calibre / Tipo</th>
+          <th>Qtd. / caixa</th>
+          <th>Efeito no Dano</th>
+          <th>Compatibilidade</th>
+          <th class="r">Preço (R$)</th>
+          <th class="r">Legalidade</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td><div class="item-name">.38 SPL — Padrão LPC</div><div class="item-sub">CBC Polymatch · Full Metal Jacket</div></td>
+          <td class="mono c">50</td>
+          <td class="dmg-neu dmg-mod">Base</td>
+          <td><div class="compat"><span class="badge">Revólver .38</span></div></td>
+          <td class="cost">R$ 340</td>
+          <td><span class="flag-legal">● LEGAL</span></td>
+          <td class="notes">Munição mais comum do Brasil. Fácil de encontrar.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">.38 SPL — Expansiva HP</div><div class="item-sub">Hollow Point · defesa pessoal</div></td>
+          <td class="mono c">20</td>
+          <td class="dmg-up dmg-mod">+1D, não penetra armadura</td>
+          <td><div class="compat"><span class="badge">Revólver .38</span></div></td>
+          <td class="cost">R$ 280</td>
+          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td class="notes">Expande no alvo. Dano adicional em carne, não atravessa colete.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">9mm Luger — Padrão ETOG</div><div class="item-sub">CBC 124gr · Full Metal Jacket</div></td>
+          <td class="mono c">50</td>
+          <td class="dmg-neu dmg-mod">Base</td>
+          <td><div class="compat"><span class="badge">Pistola 9mm</span><span class="badge">P. Compacta</span><span class="badge">SMG</span></div></td>
+          <td class="cost">R$ 490</td>
+          <td><span class="flag-legal">● LEGAL</span></td>
+          <td class="notes">Padrão militar/policial brasileiro. Onipresente.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">9mm — Expansiva +P</div><div class="item-sub">Hollow Point overpressure</div></td>
+          <td class="mono c">20</td>
+          <td class="dmg-up dmg-mod">+1F, não penetra armadura</td>
+          <td><div class="compat"><span class="badge">Pistola 9mm</span><span class="badge">P. Compacta</span></div></td>
+          <td class="cost">R$ 350</td>
+          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td class="notes">Pressão extra. Não usar em armas antigas ou danificadas.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">9mm — Subsônica</div><div class="item-sub">147gr · para uso com supressor</div></td>
+          <td class="mono c">50</td>
+          <td class="dmg-down dmg-mod">−1F, silencia com supressor</td>
+          <td><div class="compat"><span class="badge">Pistola 9mm</span><span class="badge">SMG</span></div></td>
+          <td class="cost">R$ 620</td>
+          <td><span class="flag-legal">● LEGAL</span></td>
+          <td class="notes">Sem estouro supersônico. Essencial com supressor.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">.45 ACP — Padrão FMJ</div><div class="item-sub">230gr ball</div></td>
+          <td class="mono c">50</td>
+          <td class="dmg-neu dmg-mod">Base</td>
+          <td><div class="compat"><span class="badge">Pistola .45</span></div></td>
+          <td class="cost">R$ 680</td>
+          <td><span class="flag-legal">● LEGAL</span></td>
+          <td class="notes">Alta massa, baixa velocidade. Bom stopping power.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">.44 Magnum — Padrão JSP</div><div class="item-sub">240gr jacketed soft point</div></td>
+          <td class="mono c">50</td>
+          <td class="dmg-neu dmg-mod">Base</td>
+          <td><div class="compat"><span class="badge">Pistola .44</span></div></td>
+          <td class="cost">R$ 900</td>
+          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td class="notes">Calibre restrito no Brasil. Requer CR de atirador.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">5.56mm NATO / .223 Rem</div><div class="item-sub">55gr FMJ · M193</div></td>
+          <td class="mono c">20</td>
+          <td class="dmg-neu dmg-mod">Base</td>
+          <td><div class="compat"><span class="badge">Fuzil de Assalto</span><span class="badge">Carabina .223</span></div></td>
+          <td class="cost">R$ 280</td>
+          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td class="notes">Munição padrão OTAN. Alta velocidade, fragmenta no alvo.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">.308 Win / 7.62×51 NATO</div><div class="item-sub">147gr FMJ boat-tail</div></td>
+          <td class="mono c">20</td>
+          <td class="dmg-neu dmg-mod">Base</td>
+          <td><div class="compat"><span class="badge">Rifle de Caça</span><span class="badge">Sniper 7.62</span></div></td>
+          <td class="cost">R$ 420</td>
+          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td class="notes">Excelente precisão a longas distâncias. Penetra vidro blindado leve.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">.308 Win — Expansiva Match</div><div class="item-sub">168gr HPBT Sierra MatchKing</div></td>
+          <td class="mono c">20</td>
+          <td class="dmg-up dmg-mod">+2F a longa distância</td>
+          <td><div class="compat"><span class="badge">Rifle de Caça</span><span class="badge">Sniper 7.62</span></div></td>
+          <td class="cost">R$ 750</td>
+          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td class="notes">Para tiro de precisão. +2F se distância > 200m.</td>
+        </tr>
+
+        <tr class="featured">
+          <td><div class="item-name">.50 BMG</div><div class="item-sub">660gr FMJ · Armor Piercing</div></td>
+          <td class="mono c">10</td>
+          <td class="dmg-up dmg-mod">Ignora armaduras leves</td>
+          <td><div class="compat"><span class="badge hi">Rifle Anti-Material</span></div></td>
+          <td class="cost">R$ 1.400</td>
+          <td><span class="flag-illegal">✕ ILEGAL (civil)</span></td>
+          <td class="notes">Apenas militar/policial. Perfura veículos e paredes de concreto.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">12ga — Chumbo Grosso (00 Buck)</div><div class="item-sub">9 projéteis · defense load</div></td>
+          <td class="mono c">25</td>
+          <td class="dmg-neu dmg-mod">Base (Blast Fire)</td>
+          <td><div class="compat"><span class="badge">Escopeta Cal.12</span><span class="badge">Semi-auto</span><span class="badge">Duplo</span><span class="badge">Tática</span></div></td>
+          <td class="cost">R$ 180</td>
+          <td><span class="flag-legal">● LEGAL</span></td>
+          <td class="notes">Padrão de defesa. Múltiplos projéteis simultâneos.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">12ga — Slug</div><div class="item-sub">Projétil único sólido · 1oz</div></td>
+          <td class="mono c">10</td>
+          <td class="dmg-up dmg-mod">+5F, sem dispersão</td>
+          <td><div class="compat"><span class="badge">Escopeta Cal.12</span><span class="badge">Semi-auto</span></div></td>
+          <td class="cost">R$ 120</td>
+          <td><span class="flag-legal">● LEGAL</span></td>
+          <td class="notes">Projétil único de alta energia. Sem efeito Blast Fire — trata como rifle (alcance 60m).</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Flechas — Campo / Ponta Fixa</div><div class="item-sub">Carbono · 400gr · broadhead</div></td>
+          <td class="mono c">12</td>
+          <td class="dmg-neu dmg-mod">Base</td>
+          <td><div class="compat"><span class="badge">Arco Composto</span></div></td>
+          <td class="cost">R$ 160</td>
+          <td><span class="flag-legal">● LEGAL</span></td>
+          <td class="notes">Silenciosas. Reutilizáveis se recuperadas intactas.</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ CARREGADORES ══════════ -->
+  <div class="cat-section cat-mag">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Carregadores &amp; Pentes Extras</div>
+      <div class="cat-count">08 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th class="c">Capacidade</th>
+          <th>Compatibilidade</th>
+          <th class="c">Recarga (AP)</th>
+          <th class="r">Preço (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td><div class="item-name">Speedloader Revólver .38</div><div class="item-sub">HKS / Safariland</div></td>
+          <td class="mono c">6</td>
+          <td><div class="compat"><span class="badge">Revólver .38</span></div></td>
+          <td class="mono c">2 AP</td>
+          <td class="cost">R$ 120</td>
+          <td class="notes">Reduz recarga do revólver de 4 AP para 2 AP.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Carregador Original Glock 9mm</div><div class="item-sub">17 / 19 tiros · Glock OEM</div></td>
+          <td class="mono c">17</td>
+          <td><div class="compat"><span class="badge">Pistola 9mm</span><span class="badge">SMG</span></div></td>
+          <td class="mono c">1 AP</td>
+          <td class="cost">R$ 550</td>
+          <td class="notes">Carregador tático, drop-free. Padrão para troca rápida.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Carregador Estendido 9mm</div><div class="item-sub">ProMag / ETS · 32 tiros</div></td>
+          <td class="mono c">32</td>
+          <td><div class="compat"><span class="badge">Pistola 9mm</span><span class="badge">SMG</span></div></td>
+          <td class="mono c">1 AP</td>
+          <td class="cost">R$ 420</td>
+          <td class="notes">Pente maior. +15 rounds sem recarregar. Ligeiramente mais pesado.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Carregador .45 ACP</div><div class="item-sub">Original Colt M1911 · 7 tiros</div></td>
+          <td class="mono c">7</td>
+          <td><div class="compat"><span class="badge">Pistola .45</span></div></td>
+          <td class="mono c">1 AP</td>
+          <td class="cost">R$ 480</td>
+          <td class="notes">Capacidade menor, mas confiável.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Carregador PMAG AR15 / M4</div><div class="item-sub">Magpul Gen M3 · 30 tiros · 5.56</div></td>
+          <td class="mono c">30</td>
+          <td><div class="compat"><span class="badge">Fuzil Assalto</span><span class="badge">Carabina .223</span></div></td>
+          <td class="mono c">1 AP</td>
+          <td class="cost">R$ 280</td>
+          <td class="notes">Polímero reforçado, resistente a impactos. Padrão operacional.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Carregador PMAG AK · 7.62×39</div><div class="item-sub">Magpul · 30 tiros</div></td>
+          <td class="mono c">30</td>
+          <td><div class="compat"><span class="badge">Fuzil AK/AKM</span></div></td>
+          <td class="mono c">1 AP</td>
+          <td class="cost">R$ 260</td>
+          <td class="notes">Compatível com AK-47 e variantes. Alimentação confiável.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Tambor 100 rounds · 5.56</div><div class="item-sub">Beta-C / Surefire · drum mag</div></td>
+          <td class="mono c">100</td>
+          <td><div class="compat"><span class="badge">Fuzil Assalto</span><span class="badge">Metralhadora Leve</span></div></td>
+          <td class="mono c">3 AP</td>
+          <td class="cost">R$ 1.800</td>
+          <td class="notes">Supressão prolongada sem recarga. Pesado; −1 AG enquanto acoplado.</td>
+        </tr>
+
+        <tr class="featured">
+          <td><div class="item-name">Carregador .338 / .308 para Sniper</div><div class="item-sub">AI / AICS / Accuracy International · 10 tiros</div></td>
+          <td class="mono c">10</td>
+          <td><div class="compat"><span class="badge hi">Rifle Sniper</span></div></td>
+          <td class="mono c">2 AP</td>
+          <td class="cost">R$ 950</td>
+          <td class="notes">Recarga de ferrolho manual mais rápida com pente destacável.</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ ÓPTICA ══════════ -->
+  <div class="cat-section cat-optics">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Óptica — Miras &amp; Lunetas</div>
+      <div class="cat-count">07 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Efeito em Jogo</th>
+          <th>Compatibilidade</th>
+          <th class="r">Preço (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td><div class="item-name">Mira de Ponto Vermelho (Red Dot)</div><div class="item-sub">ex.: Trijicon MRO / Holosun 510C</div></td>
+          <td class="effect">Aquisição de alvo rápida. −1 dificuldade em alvos até 50m.</td>
+          <td><div class="compat"><span class="badge">Pistola</span><span class="badge">Fuzil</span><span class="badge">Escopeta</span><span class="badge">SMG</span></div></td>
+          <td class="cost">R$ 1.200</td>
+          <td class="notes">Ideal para combate próximo e médio. Sem ampliação.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Luneta 3–9×40mm</div><div class="item-sub">ex.: Rossi / Hawke Airmax</div></td>
+          <td class="effect">−1 dif. em alvos a 100–300m. Inútil &lt; 50m.</td>
+          <td><div class="compat"><span class="badge">Rifle de Caça</span><span class="badge">Carabina</span></div></td>
+          <td class="cost">R$ 800</td>
+          <td class="notes">Versátil. Boa para caça e tiro esportivo.</td>
+        </tr>
+
+        <tr class="featured">
+          <td><div class="item-name">Luneta Tática 4–16×50mm FFP</div><div class="item-sub">ex.: Vector Optics Viper / Discovery</div></td>
+          <td class="effect">−2 dif. em alvos a 200–600m. Inútil &lt; 100m.</td>
+          <td><div class="compat"><span class="badge">Rifle Sniper</span><span class="badge">Precision Urbano</span></div></td>
+          <td class="cost">R$ 2.400</td>
+          <td class="notes">Primeiro plano focal — retículo escala com zoom. Para snipers.</td>
+        </tr>
+
+        <tr class="featured">
+          <td><div class="item-name">Luneta Anti-Material 10–40×56mm</div><div class="item-sub">ex.: Nightforce ATACR · long-range</div></td>
+          <td class="effect">−3 dif. em alvos a 500m+. Inútil &lt; 200m.</td>
+          <td><div class="compat"><span class="badge hi">Rifle Anti-Material</span></div></td>
+          <td class="cost">R$ 9.500</td>
+          <td class="notes">Para alvos a mais de 1km. Requer bipé para usar efetivamente.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Colimador Holográfico</div><div class="item-sub">ex.: EOTech EXPS / Vortex AMG</div></td>
+          <td class="effect">−1 dif. em alvos até 100m. Funciona com óculos NV.</td>
+          <td><div class="compat"><span class="badge">Fuzil</span><span class="badge">Carabina</span><span class="badge">SMG</span></div></td>
+          <td class="cost">R$ 3.200</td>
+          <td class="notes">Padrão de operações especiais. Compatível com night vision.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Mira Laser Tática</div><div class="item-sub">ex.: Crimson Trace / Olight Baldr</div></td>
+          <td class="effect">−1 dif. em qualquer alcance da arma. Denuncia posição.</td>
+          <td><div class="compat"><span class="badge">Pistola</span><span class="badge">SMG</span><span class="badge">Escopeta</span></div></td>
+          <td class="cost">R$ 680</td>
+          <td class="notes">Ponteiro visível. Inimigos podem rastrear o usuário pelo feixe.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Óculos de Visão Noturna (NVG)</div><div class="item-sub">ex.: PVS-14 / Gen II monocular</div></td>
+          <td class="effect">Anula penalidade de escuridão. +2 dif. p/ inimigos sem NV.</td>
+          <td><div class="compat"><span class="badge">Universal</span></div></td>
+          <td class="cost">R$ 18.000</td>
+          <td class="notes">Montagem em capacete ou cabeça. Geração II cobre até 100m.</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ ACESSÓRIOS TÁTICOS ══════════ -->
+  <div class="cat-section cat-tactical">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Acessórios Táticos</div>
+      <div class="cat-count">09 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Efeito em Jogo</th>
+          <th>Compatibilidade</th>
+          <th class="r">Preço (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td><div class="item-name">Supressor / Silenciador 9mm</div><div class="item-sub">ex.: Gemtech / Griffin Armament</div></td>
+          <td class="effect">Tiro não identificável a &gt;30m. −2 dif. em furtividade.</td>
+          <td><div class="compat"><span class="badge">Pistola 9mm</span><span class="badge">SMG 9mm</span></div></td>
+          <td class="cost">R$ 4.500</td>
+          <td class="notes">Requer munição subsônica para silêncio total. +1 AP por bulkiness.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Supressor Rifle .308</div><div class="item-sub">ex.: SureFire SOCOM / Dead Air</div></td>
+          <td class="effect">Reduz som; tiro não localizável a &gt;100m.</td>
+          <td><div class="compat"><span class="badge">Rifle Sniper</span><span class="badge">Precision Urbano</span></div></td>
+          <td class="cost">R$ 8.500</td>
+          <td class="notes">Reduz recuo em 15%. Aumenta comprimento do cano em ~20cm.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Lanterna Tática Para Arma</div><div class="item-sub">ex.: Olight PL-Pro / SureFire X300</div></td>
+          <td class="effect">Ilumina 50m. Alvo deslumbrado por 1 rodada (teste FO).</td>
+          <td><div class="compat"><span class="badge">Pistola</span><span class="badge">Fuzil</span><span class="badge">SMG</span><span class="badge">Escopeta</span></div></td>
+          <td class="cost">R$ 1.100</td>
+          <td class="notes">Acoplada ao trilho Picatinny. 500+ lúmens. Botão de pressão.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Bipé Tático</div><div class="item-sub">ex.: Harris / Atlas · ajustável</div></td>
+          <td class="effect">Em posição deitada: −2 dif. em tiros de precisão.</td>
+          <td><div class="compat"><span class="badge">Rifle Sniper</span><span class="badge">Metralhadora Leve</span><span class="badge">Anti-Material</span></div></td>
+          <td class="cost">R$ 750</td>
+          <td class="notes">Dobra quando não usado. Essencial para tiro além de 400m.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Coronha Dobrável / Ajustável</div><div class="item-sub">ex.: Magpul CTR / MOE</div></td>
+          <td class="effect">Arma torna-se ocultável. −1 ao alcance efetivo.</td>
+          <td><div class="compat"><span class="badge">Fuzil</span><span class="badge">Carabina</span><span class="badge">SMG</span></div></td>
+          <td class="cost">R$ 380</td>
+          <td class="notes">Reduz comprimento total em ~25cm. Sob casaco com esforço.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Punho Frontal (Foregrip)</div><div class="item-sub">Vertical ou angled grip · Picatinny</div></td>
+          <td class="effect">−1 dif. em ataques com rajada. Não aplicável a pistolas.</td>
+          <td><div class="compat"><span class="badge">Fuzil</span><span class="badge">SMG</span><span class="badge">Escopeta Tática</span></div></td>
+          <td class="cost">R$ 220</td>
+          <td class="notes">Reduz desvio em disparos contínuos. Fácil de instalar.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Coldre Tático de Coxa</div><div class="item-sub">Serpa / BlackHawk · kydex</div></td>
+          <td class="effect">Saque: 1 AP (vs. 2 sem coldre tático).</td>
+          <td><div class="compat"><span class="badge">Pistola</span><span class="badge">Revólver</span></div></td>
+          <td class="cost">R$ 320</td>
+          <td class="notes">Retenção por trava de segurança. Acesso rápido em combate.</td>
+        </tr>
+
+        <tr class="featured">
+          <td><div class="item-name">Lançador de Granadas Acoplado</div><div class="item-sub">M203 / HK79 · trilho inferior</div></td>
+          <td class="effect">Adiciona ação de Lança-Granada ao fuzil. +2 AP para usar.</td>
+          <td><div class="compat"><span class="badge hi">Fuzil de Assalto</span></div></td>
+          <td class="cost">R$ 6.500</td>
+          <td class="notes">Dano e escala igual ao Lança-Granada standalone. Recarga 3 AP.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Kit Supressor Improvisado</div><div class="item-sub">Construção artesanal · garrafa PET / solvent trap</div></td>
+          <td class="effect">Reduz som; −1 dif. furtividade. Dura 3–5 tiros.</td>
+          <td><div class="compat"><span class="badge">Pistola 9mm</span><span class="badge">.22</span></div></td>
+          <td class="cost">R$ 15</td>
+          <td class="notes">Solução de campo. Degrada rapidamente. Fabricação ilegal no Brasil.</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ MANUTENÇÃO & MISC ══════════ -->
+  <div class="cat-section cat-misc">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Manutenção &amp; Equipamento de Suporte</div>
+      <div class="cat-count">06 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Efeito em Jogo</th>
+          <th class="r">Preço (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td><div class="item-name">Kit de Limpeza Universal</div><div class="item-sub">vergalhão, patches, óleo lubrificante</div></td>
+          <td class="effect">Arma mal mantida: +1 dif. em testes de arma. Kit remove penalidade.</td>
+          <td class="cost">R$ 80</td>
+          <td class="notes">Necessário após uso intenso, contato com água ou areia.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Colete Portacarregadores (Chest Rig)</div><div class="item-sub">até 6 pentes + pistola</div></td>
+          <td class="effect">Troca de carregador não custa AP extra de busca.</td>
+          <td class="cost">R$ 450</td>
+          <td class="notes">Sem o colete, trocar carregador de um bolso custa +1 AP.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Granada de Fragmentação</div><div class="item-sub">M67 / RGD-5 · frag grenade</div></td>
+          <td class="effect">15K + 2KD · área 5m · 4 AP para lançar</td>
+          <td class="cost">R$ 1.200</td>
+          <td class="notes">Escala Kilo. Ilegais. Cada unidade. Pino + delay de 4 seg.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Granada de Fumaça</div><div class="item-sub">M18 · colorida para marcação</div></td>
+          <td class="effect">Cobre área 10m. Testes visuais na área com +3 dif. por 3 rodadas.</td>
+          <td class="cost">R$ 180</td>
+          <td class="notes">Sinalizador ou cobertura tática. Dura ~60 segundos.</td>
+        </tr>
+
+        <tr>
+          <td><div class="item-name">Granada de Atordoamento (Flashbang)</div><div class="item-sub">M84 stun grenade</div></td>
+          <td class="effect">Alvos na área: ação seguinte com +4 dif. (teste SP evita).</td>
+          <td class="cost">R$ 650</td>
+          <td class="notes">Não-letal. Inútil contra protetores auditivos/óculos especiais.</td>
+        </tr>
+
+        <tr class="featured">
+          <td><div class="item-name">C4 / Explosivo Plástico</div><div class="item-sub">bloco 500g + detonador</div></td>
+          <td class="effect">50K + 5KD · área 10m · detonação à distância ou temporizador</td>
+          <td class="cost">R$ 4.800</td>
+          <td class="notes">Escala Kilo. Moldável. Ilegais. Destrói veículos e estruturas. Requer Vocacional (Explosivos).</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- FOOTNOTES -->
+  <div class="footnotes">
+    <div>
+      <div class="fn-title">Modificadores de Munição</div>
+      <div class="fn-row"><span class="fn-key">Base</span><span class="fn-val">Sem alteração no dano da arma</span></div>
+      <div class="fn-row"><span class="fn-key">+1F / +2F</span><span class="fn-val">Acrescenta ao Flat fixo da arma</span></div>
+      <div class="fn-row"><span class="fn-key">+1D</span><span class="fn-val">Acrescenta um dado de dano</span></div>
+      <div class="fn-row"><span class="fn-key">−1F</span><span class="fn-val">Reduz o Flat (munição mais fraca)</span></div>
+      <div class="fn-row"><span class="fn-key">Não penetra</span><span class="fn-val">Ajustes de armadura dobram contra essa munição</span></div>
+      <div class="fn-row"><span class="fn-key">Ignora armadura</span><span class="fn-val">Ajustes de armadura são ignorados</span></div>
+    </div>
+    <div>
+      <div class="fn-title">Legalidade no Brasil</div>
+      <div class="fn-row"><span class="fn-key fn-key" style="color:var(--text-mono);">● LEGAL</span><span class="fn-val">Disponível a qualquer CAC registrado</span></div>
+      <div class="fn-row"><span class="fn-key" style="color:#8a7a5a;">◐ RESTRITO</span><span class="fn-val">Requer Certificado de Registro (CR) específico ou registro de atirador/colecionador</span></div>
+      <div class="fn-row"><span class="fn-key" style="color:var(--red);">✕ ILEGAL</span><span class="fn-val">Uso exclusivo militar/policial ou proibido. Mercado negro: preço ×3 a ×8</span></div>
+      <div style="margin-top:12px;" class="fn-row"><span class="fn-val" style="font-style:italic;color:var(--text-dim);">Nota: membros do Arcanum Arcanorum têm acesso a canais de aquisição independentes da legislação civil através dos signatários militares e policiais da Arcana Magna.</span></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
