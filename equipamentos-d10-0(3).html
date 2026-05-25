@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arsenal — D10/0 Equipamentos Modernos</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --bg:        #0a0b0d;
+  --surface:   #111318;
+  --panel:     #161920;
+  --border:    #22262f;
+  --border-hi: #353c4a;
+  --text:      #c8cdd8;
+  --text-dim:  #5a6070;
+  --text-mono: #7a9a7a;
+  --accent:    #c9a84c;
+  --accent-dim:#5a4a20;
+  --red:       #c03838;
+  --red-dim:   #4a1818;
+  --green:     #4a8a5a;
+  --green-dim: #1a3022;
+  --blue:      #3a6a9a;
+  --blue-dim:  #152030;
+  --cat-pistol: #c9a84c;
+  --cat-rifle:  #9a6a3a;
+  --cat-shotgun:#7a5a8a;
+  --cat-melee:  #7a3a3a;
+  --cat-armor:  #3a6a7a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* scanline texture */
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.06) 2px,
+    rgba(0,0,0,0.06) 4px
+  );
+}
+
+.page { position: relative; z-index: 1; max-width: 1060px; margin: 0 auto; padding: 0 20px 60px; }
+
+/* ── HEADER ── */
+header {
+  border-bottom: 1px solid var(--border);
+  padding: 36px 0 24px;
+  margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 24px;
+}
+
+.header-left {}
+
+.doc-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #e8e4dc;
+  line-height: 1;
+}
+
+h1 span {
+  color: var(--accent);
+}
+
+.header-meta {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  line-height: 2;
+  text-align: right;
+}
+
+/* ── REFERENCE BAR ── */
+.ref-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 40px;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.ref-cell {
+  background: var(--panel);
+  padding: 10px 14px;
+}
+
+.ref-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 3px;
+}
+
+.ref-value {
+  font-size: 12px;
+  color: var(--text-mono);
+}
+
+/* ── CATEGORY SECTION ── */
+.cat-section { margin-bottom: 48px; }
+
+.cat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cat-pip {
+  width: 8px; height: 8px;
+  flex-shrink: 0;
+}
+
+.cat-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.cat-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+/* pistol */
+.cat-pistol  .cat-pip { background: var(--cat-pistol); }
+.cat-pistol  .cat-title { color: var(--cat-pistol); }
+/* rifle */
+.cat-rifle   .cat-pip { background: var(--cat-rifle); }
+.cat-rifle   .cat-title { color: var(--cat-rifle); }
+/* shotgun */
+.cat-shotgun .cat-pip { background: var(--cat-shotgun); }
+.cat-shotgun .cat-title { color: var(--cat-shotgun); }
+/* melee */
+.cat-melee   .cat-pip { background: var(--cat-melee); }
+.cat-melee   .cat-title { color: var(--cat-melee); }
+/* armor */
+.cat-armor   .cat-pip { background: var(--cat-armor); }
+.cat-armor   .cat-title { color: var(--cat-armor); }
+
+/* ── TABLE ── */
+.eq-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.eq-table thead tr {
+  background: var(--surface);
+}
+
+.eq-table th {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-hi);
+  white-space: nowrap;
+  font-weight: 400;
+}
+
+.eq-table th.num { text-align: center; }
+
+.eq-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.eq-table tr:last-child td { border-bottom: none; }
+
+.eq-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* item name */
+.item-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ddd8cc;
+  letter-spacing: 0.02em;
+}
+
+.item-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 1px;
+}
+
+/* numeric cells */
+td.num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  text-align: center;
+  color: var(--text-mono);
+}
+
+td.dmg {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  text-align: center;
+  color: #d4b87a;
+  white-space: nowrap;
+}
+
+td.adj {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+td.notes {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-style: italic;
+  max-width: 220px;
+}
+
+/* skill tag */
+.skill-tag {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  padding: 2px 6px;
+  border: 1px solid var(--border-hi);
+  color: var(--text-dim);
+  background: var(--surface);
+  white-space: nowrap;
+}
+
+/* ammo tag */
+.ammo {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* cost */
+td.cost {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* AP col */
+td.ap {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  text-align: center;
+  color: #9ab;
+}
+
+/* adj colors */
+.adj-neg { color: #5aaa7a; }
+.adj-pos { color: var(--red); }
+.adj-neu { color: var(--text-dim); }
+
+/* row highlight for special items */
+tr.featured td { background: rgba(201,168,76,0.03); }
+
+/* ── ARMOR TABLE EXTRAS ── */
+.prot-bar {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.prot-pip {
+  width: 9px; height: 9px;
+  background: var(--cat-armor);
+  opacity: 0.3;
+}
+.prot-pip.on { opacity: 1; }
+
+/* ── FOOTER NOTE ── */
+.footnotes {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.footnote-block {}
+
+.fn-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-dim);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.fn-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 5px;
+  font-size: 13px;
+  align-items: baseline;
+}
+
+.fn-key {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.fn-val { color: var(--text-dim); }
+
+/* ── DIVIDER ── */
+.rule { height:1px; background: var(--border); margin: 0 0 40px; }
+
+@media (max-width: 700px) {
+  .footnotes { grid-template-columns: 1fr; }
+  header { grid-template-columns: 1fr; }
+  .header-meta { text-align: left; }
+  td.notes { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div class="doc-tag">D10/0 System · Arcanum Arcanorum · Suplemento de Campo</div>
+      <h1>Arsenal <span>&amp;</span> Proteção</h1>
+      <div style="font-size:13px;color:var(--text-dim);margin-top:6px;font-style:italic;">Equipamentos modernos — estatísticas compatíveis com o sistema D10/0 v0.80</div>
+    </div>
+    <div class="header-meta">
+      REV 1.0 · ARCANUM ARCANORUM<br>
+      CLASSIFICAÇÃO: VIGILIS+<br>
+      ACESSO: GRAU I
+    </div>
+  </header>
+
+  <!-- REFERENCE BAR -->
+  <div class="ref-bar">
+    <div class="ref-cell">
+      <div class="ref-label">Dano Flat</div>
+      <div class="ref-value">Valor fixo somado ao variável</div>
+    </div>
+    <div class="ref-cell">
+      <div class="ref-label">Dano Variável</div>
+      <div class="ref-value">D = d10 (0 vira máx 10)</div>
+    </div>
+    <div class="ref-cell">
+      <div class="ref-label">Limitador (X)</div>
+      <div class="ref-value">Máx. do dado = atributo X</div>
+    </div>
+    <div class="ref-cell">
+      <div class="ref-label">Ajuste F</div>
+      <div class="ref-value">Redução/aumento fixo no dano</div>
+    </div>
+    <div class="ref-cell">
+      <div class="ref-label">Ajuste R</div>
+      <div class="ref-value">±X por cada 10 pts de dano</div>
+    </div>
+    <div class="ref-cell">
+      <div class="ref-label">AP (custo)</div>
+      <div class="ref-value">Pontos de ação por disparo</div>
+    </div>
+  </div>
+
+  <!-- ══════════ ARMAS CURTAS ══════════ -->
+  <div class="cat-section cat-pistol">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Armas Curtas — Pistolas &amp; Submetralhadoras</div>
+      <div class="cat-count">08 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th class="num">Flat</th>
+          <th class="num">Variável</th>
+          <th class="num">AP</th>
+          <th>Munição / Cap.</th>
+          <th>Alcance</th>
+          <th>Habilidade</th>
+          <th class="num">Custo (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Revólver .38</div><div class="item-sub">ex.: Smith &amp; Wesson Model 10</div></td>
+          <td class="num">3</td>
+          <td class="dmg">1D</td>
+          <td class="ap">2</td>
+          <td><span class="ammo">.38 Spl · 6</span></td>
+          <td class="num">20m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 2.400</td>
+          <td class="notes">Confiável, sem falhas de ejeção. Recarga lenta (4 AP).</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Pistola 9mm</div><div class="item-sub">ex.: Glock 17 / Beretta 92</div></td>
+          <td class="num">5</td>
+          <td class="dmg">1D</td>
+          <td class="ap">2</td>
+          <td><span class="ammo">9mm · 17</span></td>
+          <td class="num">30m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 3.500</td>
+          <td class="notes">Padrão policial/militar. Munição fácil de encontrar.</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Pistola .45 ACP</div><div class="item-sub">ex.: Colt M1911 / HK USP .45</div></td>
+          <td class="num">7</td>
+          <td class="dmg">1D</td>
+          <td class="ap">2</td>
+          <td><span class="ammo">.45 ACP · 8</span></td>
+          <td class="num">25m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 4.700</td>
+          <td class="notes">Alto stopping power. Recuo +1 dif. no segundo disparo.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Pistola .44 Magnum</div><div class="item-sub">ex.: Desert Eagle / S&amp;W Model 29</div></td>
+          <td class="num">5</td>
+          <td class="dmg">2D</td>
+          <td class="ap">2</td>
+          <td><span class="ammo">.44 Mag · 6–8</span></td>
+          <td class="num">35m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 7.000</td>
+          <td class="notes">Recuo pesado: dificuldade +2 sem treinamento específico.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Pistola Compacta</div><div class="item-sub">ex.: Glock 26 / SIG P365</div></td>
+          <td class="num">4</td>
+          <td class="dmg">1D</td>
+          <td class="ap">2</td>
+          <td><span class="ammo">9mm · 10</span></td>
+          <td class="num">15m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 3.200</td>
+          <td class="notes">Ocultável. Difícil de detectar em revista corporal (−10 Sensorial).</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">SMG Compacta</div><div class="item-sub">ex.: MP5K / Uzi</div></td>
+          <td class="num">4</td>
+          <td class="dmg">1D</td>
+          <td class="ap">3</td>
+          <td><span class="ammo">9mm · 30</span></td>
+          <td class="num">50m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 16.500</td>
+          <td class="notes">Rajada (ver regras Burst Fire). Semi/auto seletivo.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Submetralhadora</div><div class="item-sub">ex.: MP5 / Scorpion EVO</div></td>
+          <td class="num">5</td>
+          <td class="dmg">1D</td>
+          <td class="ap">3</td>
+          <td><span class="ammo">9mm · 30</span></td>
+          <td class="num">100m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 20.500</td>
+          <td class="notes">Precisão superior à SMG compacta. Culatra dobrável.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Pistola de Sinalização</div><div class="item-sub">Flare gun</div></td>
+          <td class="num">0</td>
+          <td class="dmg">3D</td>
+          <td class="ap">3</td>
+          <td><span class="ammo">26mm · 1</span></td>
+          <td class="num">30m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 450</td>
+          <td class="notes">Dano de fogo. Incendeia alvos/ambiente. Recarga 4 AP.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ ARMAS LONGAS ══════════ -->
+  <div class="cat-section cat-rifle">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Armas Longas — Rifles &amp; Fuzis</div>
+      <div class="cat-count">08 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th class="num">Flat</th>
+          <th class="num">Variável</th>
+          <th class="num">AP</th>
+          <th>Munição / Cap.</th>
+          <th>Alcance</th>
+          <th>Habilidade</th>
+          <th class="num">Custo (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Rifle de Caça</div><div class="item-sub">ex.: Remington 700 / Winchester 70</div></td>
+          <td class="num">10</td>
+          <td class="dmg">2D</td>
+          <td class="ap">3</td>
+          <td><span class="ammo">.308 Win · 5</span></td>
+          <td class="num">400m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 7.000</td>
+          <td class="notes">Ferrolho manual. Preciso a longas distâncias.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Fuzil de Assalto</div><div class="item-sub">ex.: AK-47 / M4 / FAMAS</div></td>
+          <td class="num">10</td>
+          <td class="dmg">2D</td>
+          <td class="ap">3</td>
+          <td><span class="ammo">5.56/7.62 · 30</span></td>
+          <td class="num">300m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 18.500</td>
+          <td class="notes">Modo semi/rajada. Ver regras Burst Fire.</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Rifle Sniper 7.62mm</div><div class="item-sub">ex.: Dragunov SVD / SR-25</div></td>
+          <td class="num">15</td>
+          <td class="dmg">3D</td>
+          <td class="ap">4</td>
+          <td><span class="ammo">7.62×51 · 10</span></td>
+          <td class="num">800m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 35.000</td>
+          <td class="notes">+1 grau de sucesso ao mirar por 1 turno extra (2 AP).</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Rifle Anti-Material</div><div class="item-sub">ex.: Barrett M82 / .50 BMG</div></td>
+          <td class="num">20</td>
+          <td class="dmg">4D</td>
+          <td class="ap">5</td>
+          <td><span class="ammo">.50 BMG · 10</span></td>
+          <td class="num">1.500m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 70.000</td>
+          <td class="notes">Perfura armaduras leves. Penetra veículos. Recuo extremo.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Carabina .223</div><div class="item-sub">ex.: Ruger Mini-14 / AR-15</div></td>
+          <td class="num">8</td>
+          <td class="dmg">2D</td>
+          <td class="ap">2</td>
+          <td><span class="ammo">5.56mm · 20</span></td>
+          <td class="num">200m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 10.500</td>
+          <td class="notes">Leve, manobrável em ambientes fechados.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Metralhadora Leve</div><div class="item-sub">ex.: M249 SAW / Minimi</div></td>
+          <td class="num">10</td>
+          <td class="dmg">2D</td>
+          <td class="ap">3</td>
+          <td><span class="ammo">5.56mm · 100–200</span></td>
+          <td class="num">400m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 47.000</td>
+          <td class="notes">Supressão: inimigos em área fazem testes com +3 dif.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Rifle de Precisão Urbano</div><div class="item-sub">ex.: SIG MCX Spear / HK 417</div></td>
+          <td class="num">12</td>
+          <td class="dmg">2D</td>
+          <td class="ap">3</td>
+          <td><span class="ammo">6.8mm · 20</span></td>
+          <td class="num">500m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 26.500</td>
+          <td class="notes">Balanceado para operações táticas urbanas.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Arco Tático Composto</div><div class="item-sub">ex.: Mathews / Hoyt</div></td>
+          <td class="num">3</td>
+          <td class="dmg">2D(ST)</td>
+          <td class="ap">4</td>
+          <td><span class="ammo">Flechas · ∞*</span></td>
+          <td class="num">80m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 5.300</td>
+          <td class="notes">Silencioso. Flechas recuperáveis. *Limitado pelo carregado.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ ESCOPETAS ══════════ -->
+  <div class="cat-section cat-shotgun">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Escopetas &amp; Armas de Dispersão</div>
+      <div class="cat-count">05 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th class="num">Flat</th>
+          <th class="num">Variável</th>
+          <th class="num">AP</th>
+          <th>Munição / Cap.</th>
+          <th>Alcance</th>
+          <th>Habilidade</th>
+          <th class="num">Custo (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Escopeta Calibre 12</div><div class="item-sub">ex.: Remington 870 / Mossberg 500</div></td>
+          <td class="num">—</td>
+          <td class="dmg">Blast*</td>
+          <td class="ap">3</td>
+          <td><span class="ammo">12ga · 5–8</span></td>
+          <td class="num">25m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 3.500</td>
+          <td class="notes">*Blast Fire: &gt;−10: 5+1D / &gt;0: 10+2D / &gt;20: 15+3D</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Escopeta Semiautomática</div><div class="item-sub">ex.: Benelli M4 / Saiga-12</div></td>
+          <td class="num">—</td>
+          <td class="dmg">Blast*</td>
+          <td class="ap">2</td>
+          <td><span class="ammo">12ga · 8</span></td>
+          <td class="num">25m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 8.000</td>
+          <td class="notes">*Mesmo Blast. AP reduzido pela semi-auto. Confiável.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Escopeta de Cano Duplo</div><div class="item-sub">Side-by-side ou Over/Under</div></td>
+          <td class="num">—</td>
+          <td class="dmg">Blast*</td>
+          <td class="ap">3</td>
+          <td><span class="ammo">12ga · 2</span></td>
+          <td class="num">20m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 3.000</td>
+          <td class="notes">Pode disparar ambos os canos (+1D no variável, +1 dif.).</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Escopeta Tática Curta</div><div class="item-sub">ex.: Mossberg 590 Shockwave</div></td>
+          <td class="num">—</td>
+          <td class="dmg">Blast*</td>
+          <td class="ap">3</td>
+          <td><span class="ammo">12ga · 6</span></td>
+          <td class="num">12m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 4.000</td>
+          <td class="notes">Manobrável. Dispersão maior. Ocultável sob casaco.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Lança-Granada</div><div class="item-sub">ex.: M203 / HK69 (acoplado ou independente)</div></td>
+          <td class="num">20K</td>
+          <td class="dmg">2KD</td>
+          <td class="ap">4</td>
+          <td><span class="ammo">40mm · 1</span></td>
+          <td class="num">150m</td>
+          <td><span class="skill-tag">Longa Dist.</span></td>
+          <td class="cost">R$ 23.500</td>
+          <td class="notes">Escala Kilo. Área de efeito: 5m. Recarga 3 AP.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ ARMAS BRANCAS ══════════ -->
+  <div class="cat-section cat-melee">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Armas Brancas &amp; Corpo-a-Corpo</div>
+      <div class="cat-count">09 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th class="num">Flat</th>
+          <th class="num">Variável</th>
+          <th class="num">AP</th>
+          <th>Alcance</th>
+          <th>Habilidade</th>
+          <th class="num">Custo (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Soco Nu</div><div class="item-sub">Ataque desarmado</div></td>
+          <td class="num">0</td>
+          <td class="dmg">1D(ST)</td>
+          <td class="ap">2</td>
+          <td class="num">Contato</td>
+          <td><span class="skill-tag">C-a-C</span></td>
+          <td class="cost">—</td>
+          <td class="notes">Base para todas as técnicas marciais.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Faca de Combate</div><div class="item-sub">ex.: KA-BAR / Gerber Mark II</div></td>
+          <td class="num">0</td>
+          <td class="dmg">2D(ST)</td>
+          <td class="ap">2</td>
+          <td class="num">Contato</td>
+          <td><span class="skill-tag">C-a-C</span></td>
+          <td class="cost">R$ 450</td>
+          <td class="notes">Ocultável. Pode ser arremessada (alcance 10m, −1 dano).</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Baioneta / Machado</div><div class="item-sub">Arma de haste curta</div></td>
+          <td class="num">2</td>
+          <td class="dmg">2D(ST)</td>
+          <td class="ap">2</td>
+          <td class="num">1m</td>
+          <td><span class="skill-tag">C-a-C</span></td>
+          <td class="cost">R$ 350</td>
+          <td class="notes">Versátil entre corte e penetração.</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Espada Tática / Sabre</div><div class="item-sub">ex.: Espada de duelista / katana</div></td>
+          <td class="num">2</td>
+          <td class="dmg">3D(ST)</td>
+          <td class="ap">2</td>
+          <td class="num">1m</td>
+          <td><span class="skill-tag">C-a-C</span></td>
+          <td class="cost">R$ 2.400</td>
+          <td class="notes">Em mãos treinadas: +1 grau de sucesso em ataques rápidos.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Cassetete / Tonfa</div><div class="item-sub">Bastão de impacto</div></td>
+          <td class="num">3</td>
+          <td class="dmg">1D(ST)</td>
+          <td class="ap">2</td>
+          <td class="num">1m</td>
+          <td><span class="skill-tag">C-a-C</span></td>
+          <td class="cost">R$ 250</td>
+          <td class="notes">Dano contundente. Não-letal possível (−2 flat).</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Marreta / Maça</div><div class="item-sub">Arma de impacto pesado</div></td>
+          <td class="num">10</td>
+          <td class="dmg">2D(ST)</td>
+          <td class="ap">3</td>
+          <td class="num">1m</td>
+          <td><span class="skill-tag">C-a-C</span></td>
+          <td class="cost">R$ 300</td>
+          <td class="notes">Pode destruir objetos e armaduras leves com grau de sucesso.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Corrente / Chicote</div><div class="item-sub">Arma flexível</div></td>
+          <td class="num">0</td>
+          <td class="dmg">2D(ST)</td>
+          <td class="ap">3</td>
+          <td class="num">2–3m</td>
+          <td><span class="skill-tag">C-a-C</span></td>
+          <td class="cost">R$ 150</td>
+          <td class="notes">Pode desarmar (teste oposto C-a-C) ou imobilizar membros.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Taser / Choque Elétrico</div><div class="item-sub">ex.: TASER X26 / bastão elétrico</div></td>
+          <td class="num">0</td>
+          <td class="dmg">2D</td>
+          <td class="ap">2</td>
+          <td class="num">5m (dardos)</td>
+          <td><span class="skill-tag">C-a-C / LD</span></td>
+          <td class="cost">R$ 1.800</td>
+          <td class="notes">Dano não-letal. Alvo paralisa por 1d10 rodadas (sem ST).</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Garras / Adaga Oculta</div><div class="item-sub">Lâminas acopladas à luva/pulso</div></td>
+          <td class="num">0</td>
+          <td class="dmg">2D(ST)</td>
+          <td class="ap">1</td>
+          <td class="num">Contato</td>
+          <td><span class="skill-tag">C-a-C</span></td>
+          <td class="cost">R$ 1.200</td>
+          <td class="notes">AP 1 por ser extensão natural do corpo. Muito difícil de detectar.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ ARMADURAS ══════════ -->
+  <div class="cat-section cat-armor">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Armaduras &amp; Proteção Moderna</div>
+      <div class="cat-count">08 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Ajuste</th>
+          <th>Cobertura</th>
+          <th>Penalidade AG</th>
+          <th>Tipo Ajuste</th>
+          <th class="num">Custo (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Jaqueta de Couro Reforçado</div><div class="item-sub">Couro espesso + malha interna</div></td>
+          <td class="adj"><span class="adj-neg">−2F</span></td>
+          <td>Torso, braços</td>
+          <td class="num">—</td>
+          <td style="font-size:12px;color:var(--text-dim);">Misto (couro)</td>
+          <td class="cost">R$ 850</td>
+          <td class="notes">Discreta. Boa contra armas brancas e fragmentos.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Colete à Prova de Balas NIJ II</div><div class="item-sub">ex.: Second Chance / Protek</div></td>
+          <td class="adj"><span class="adj-neg">−5F</span></td>
+          <td>Torso</td>
+          <td class="num">—</td>
+          <td style="font-size:12px;color:var(--text-dim);">Flat (dispersão)</td>
+          <td class="cost">R$ 3.500</td>
+          <td class="notes">Oculto sob roupa. Pistolas e calibres menores.</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Colete Tático NIJ IIIA</div><div class="item-sub">ex.: Safariland / Point Blank</div></td>
+          <td class="adj"><span class="adj-neg">−8F −1R</span></td>
+          <td>Torso, pescoço parcial</td>
+          <td class="num">−1</td>
+          <td style="font-size:12px;color:var(--text-dim);">Flat + Repeating</td>
+          <td class="cost">R$ 7.000</td>
+          <td class="notes">Resiste SMGs e .44 Mag. Visível. −1 AG por bulkiness.</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Armadura de Placas NIJ IV</div><div class="item-sub">Carrier + placas cerâmicas/aço</div></td>
+          <td class="adj"><span class="adj-neg">−10F −2R</span></td>
+          <td>Torso, ombros</td>
+          <td class="num">−2</td>
+          <td style="font-size:12px;color:var(--text-dim);">Flat + Repeating</td>
+          <td class="cost">R$ 14.500</td>
+          <td class="notes">Resiste fuzis. Placas podem fraturar após 3 acertos pesados.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Capacete Balístico</div><div class="item-sub">ex.: PASGT / FAST / MICH</div></td>
+          <td class="adj"><span class="adj-neg">−5F</span></td>
+          <td>Cabeça</td>
+          <td class="num">—</td>
+          <td style="font-size:12px;color:var(--text-dim);">Flat</td>
+          <td class="cost">R$ 2.400</td>
+          <td class="notes">Só cobre a cabeça. −1 PE para testes de Percepção auditiva.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Traje EOD / Desativação</div><div class="item-sub">Proteção contra explosivos</div></td>
+          <td class="adj"><span class="adj-neg">−15F −3R</span></td>
+          <td>Corpo inteiro</td>
+          <td class="num">−4</td>
+          <td style="font-size:12px;color:var(--text-dim);">Flat + Repeating</td>
+          <td class="cost">R$ 47.000</td>
+          <td class="notes">Proteção extrema. AG e AC severamente limitadas. Lento.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Colete Anti-Fragmentos</div><div class="item-sub">Kevlar leve / fragmentation vest</div></td>
+          <td class="adj"><span class="adj-neg">−3R</span></td>
+          <td>Torso</td>
+          <td class="num">—</td>
+          <td style="font-size:12px;color:var(--text-dim);">Repeating</td>
+          <td class="cost">R$ 2.400</td>
+          <td class="notes">Focado em granadas e estilhaços. Pouco contra balas diretas.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Exoesqueleto Tático Leve</div><div class="item-sub">Protótipo militar / experimental</div></td>
+          <td class="adj"><span class="adj-neg">−8F −2R</span></td>
+          <td>Corpo inteiro</td>
+          <td class="num">+1 ST</td>
+          <td style="font-size:12px;color:var(--text-dim);">Flat + Repeating</td>
+          <td class="cost">R$ 235.000</td>
+          <td class="notes">Bônus +1 ST. Requer treinamento. Bateria: 8h de operação.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- FOOTNOTES -->
+  <div class="footnotes">
+    <div class="footnote-block">
+      <div class="fn-title">Notação de Dano</div>
+      <div class="fn-row"><span class="fn-key">Flat</span><span class="fn-val">Valor fixo adicionado ao total</span></div>
+      <div class="fn-row"><span class="fn-key">1D / 2D</span><span class="fn-val">1 ou 2 dados de 10 faces</span></div>
+      <div class="fn-row"><span class="fn-key">2D(ST)</span><span class="fn-val">2 dados, máx. por dado = ST</span></div>
+      <div class="fn-row"><span class="fn-key">Blast</span><span class="fn-val">Ver tabela Blast Fire do SRD</span></div>
+      <div class="fn-row"><span class="fn-key">20K / 2KD</span><span class="fn-val">Escala Kilo (×1000), ex: explosivos</span></div>
+      <div class="fn-row"><span class="fn-key">0 no dado</span><span class="fn-val">Dano máximo (10), possível Overflow</span></div>
+    </div>
+    <div class="footnote-block">
+      <div class="fn-title">Notação de Ajuste (Armaduras)</div>
+      <div class="fn-row"><span class="fn-key">−5F</span><span class="fn-val">Reduz 5 pts de dano (fixo)</span></div>
+      <div class="fn-row"><span class="fn-key">−2R</span><span class="fn-val">Reduz 2 pts para cada 10 de dano</span></div>
+      <div class="fn-row"><span class="fn-key">−10F −2R</span><span class="fn-val">Flat primeiro, depois Repeating</span></div>
+      <div class="fn-row"><span class="fn-key">−1 AG</span><span class="fn-val">Penalidade ao atributo Agilidade</span></div>
+      <div class="fn-row"><span class="fn-key">+1 ST</span><span class="fn-val">Bônus ao atributo Força</span></div>
+      <div class="fn-row"><span class="fn-key">AP (custo)</span><span class="fn-val">Pontos de ação por ataque/disparo</span></div>
+    </div>
+  </div>
+
+</div><!-- end page -->
+</body>
+</html>
