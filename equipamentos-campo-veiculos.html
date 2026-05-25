@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equipamento de Campo & Veículos — D10/0</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --bg:           #0a0b0d;
+  --surface:      #111318;
+  --panel:        #161920;
+  --border:       #22262f;
+  --border-hi:    #353c4a;
+  --text:         #c8cdd8;
+  --text-dim:     #5a6070;
+  --text-mono:    #7a9a7a;
+  --accent:       #c9a84c;
+  --accent-dim:   #5a4a20;
+  --red:          #c03838;
+  --silver:       #8fa3bb;
+
+  --cat-inv:      #5a7a6a;   /* investigação */
+  --cat-tech:     #4a6a8a;   /* tecnologia */
+  --cat-medical:  #7a5a5a;   /* médico */
+  --cat-occult:   #6a5a8a;   /* ocultismo */
+  --cat-vehicle:  #7a7a4a;   /* veículos */
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px
+  );
+}
+
+.page { position: relative; z-index: 1; max-width: 1060px; margin: 0 auto; padding: 0 20px 60px; }
+
+/* ── HEADER ── */
+header {
+  border-bottom: 1px solid var(--border);
+  padding: 36px 0 24px;
+  margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 24px;
+}
+
+.doc-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--accent); letter-spacing: 0.2em;
+  text-transform: uppercase; margin-bottom: 8px; opacity: 0.7;
+}
+
+h1 {
+  font-size: clamp(26px, 4vw, 44px);
+  font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: #e8e4dc; line-height: 1;
+}
+h1 span { color: var(--accent); }
+
+.header-meta {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--text-dim);
+  letter-spacing: 0.15em; line-height: 2; text-align: right;
+}
+
+/* ── CATEGORY ── */
+.cat-section { margin-bottom: 48px; }
+
+.cat-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cat-pip { width: 8px; height: 8px; flex-shrink: 0; }
+.cat-title { font-size: 11px; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase; flex: 1; }
+.cat-count { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); }
+
+.cat-inv     .cat-pip  { background: var(--cat-inv); }
+.cat-inv     .cat-title { color: var(--cat-inv); }
+.cat-tech    .cat-pip  { background: var(--cat-tech); }
+.cat-tech    .cat-title { color: var(--cat-tech); }
+.cat-medical .cat-pip  { background: var(--cat-medical); }
+.cat-medical .cat-title { color: var(--cat-medical); }
+.cat-occult  .cat-pip  { background: var(--cat-occult); }
+.cat-occult  .cat-title { color: var(--cat-occult); }
+.cat-vehicle .cat-pip  { background: var(--cat-vehicle); }
+.cat-vehicle .cat-title { color: var(--cat-vehicle); }
+
+/* ── TABLE ── */
+.eq-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.eq-table thead tr { background: var(--surface); }
+.eq-table th {
+  font-family: 'Share Tech Mono', monospace; font-size: 9px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
+  text-align: left; padding: 8px 12px;
+  border-bottom: 1px solid var(--border-hi); white-space: nowrap; font-weight: 400;
+}
+.eq-table th.r { text-align: right; }
+.eq-table th.c { text-align: center; }
+.eq-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.eq-table tr:last-child td { border-bottom: none; }
+.eq-table tr:hover td { background: rgba(255,255,255,0.02); }
+tr.featured td { background: rgba(201,168,76,0.03); }
+
+.item-name { font-size: 15px; font-weight: 600; color: #ddd8cc; letter-spacing: 0.02em; }
+.item-sub { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); margin-top: 1px; }
+
+td.mono { font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--text-mono); }
+td.r { text-align: right; }
+td.c { text-align: center; font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--text-mono); }
+td.cost { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--accent); text-align: right; white-space: nowrap; }
+td.effect { font-size: 12px; color: var(--silver); font-style: italic; }
+td.notes { font-size: 12px; color: var(--text-dim); font-style: italic; max-width: 200px; }
+
+.skill-tag {
+  display: inline-block; font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; padding: 1px 5px;
+  border: 1px solid var(--border-hi); color: var(--text-dim);
+  background: var(--surface); white-space: nowrap;
+}
+.skill-tag.hi { border-color: var(--accent-dim); color: var(--accent); }
+
+/* ── VEHICLE TABLE ── */
+.veh-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.veh-table thead tr { background: var(--surface); }
+.veh-table th {
+  font-family: 'Share Tech Mono', monospace; font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim);
+  text-align: left; padding: 8px 10px;
+  border-bottom: 1px solid var(--border-hi); white-space: nowrap; font-weight: 400;
+}
+.veh-table th.c { text-align: center; }
+.veh-table th.r { text-align: right; }
+.veh-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.veh-table tr:last-child td { border-bottom: none; }
+.veh-table tr:hover td { background: rgba(255,255,255,0.02); }
+.veh-table tr.featured td { background: rgba(201,168,76,0.03); }
+
+td.vstat { font-family: 'Share Tech Mono', monospace; font-size: 12px; text-align: center; color: var(--text-mono); }
+td.vcost { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--accent); text-align: right; white-space: nowrap; }
+td.vnotes { font-size: 12px; color: var(--text-dim); font-style: italic; }
+
+.veh-type {
+  display: inline-block; font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; padding: 2px 6px; margin-bottom: 3px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.type-moto  { border: 1px solid #5a7a3a; color: #7aaa5a; background: rgba(90,122,58,0.08); }
+.type-car   { border: 1px solid #3a5a7a; color: #5a8aaa; background: rgba(58,90,122,0.08); }
+.type-suv   { border: 1px solid #6a5a2a; color: #aa8a4a; background: rgba(106,90,42,0.08); }
+.type-truck { border: 1px solid #7a4a2a; color: #aa6a4a; background: rgba(122,74,42,0.08); }
+.type-van   { border: 1px solid #5a3a7a; color: #8a5aaa; background: rgba(90,58,122,0.08); }
+.type-spec  { border: 1px solid #7a2a2a; color: #aa4a4a; background: rgba(122,42,42,0.1); }
+
+/* stat bar */
+.stat-bar { display: flex; gap: 2px; align-items: center; justify-content: center; }
+.bar-pip { width: 8px; height: 8px; background: var(--border-hi); }
+.bar-pip.on { background: var(--cat-vehicle); }
+.bar-pip.on.hi { background: var(--accent); }
+
+/* ── RULE ── */
+.rule { height: 1px; background: var(--border); margin: 0 0 40px; }
+
+/* ── FOOTNOTES ── */
+.footnotes {
+  margin-top: 48px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.fn-title {
+  font-family: 'Share Tech Mono', monospace; font-size: 9px;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--accent-dim); margin-bottom: 10px;
+  padding-bottom: 6px; border-bottom: 1px solid var(--border);
+}
+.fn-row { display: flex; gap: 10px; margin-bottom: 5px; font-size: 13px; align-items: baseline; }
+.fn-key { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent); min-width: 80px; flex-shrink: 0; }
+.fn-val { color: var(--text-dim); }
+
+@media (max-width: 700px) {
+  .footnotes { grid-template-columns: 1fr; }
+  header { grid-template-columns: 1fr; }
+  .header-meta { text-align: left; }
+  td.notes, td.vnotes { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div>
+      <div class="doc-tag">D10/0 System · Arcanum Arcanorum · Suplemento de Campo — Vol. III</div>
+      <h1>Equipamento de Campo <span>&amp;</span> Veículos</h1>
+      <div style="font-size:13px;color:var(--text-dim);margin-top:6px;font-style:italic;">
+        Itens para investigadores do arcano · Veículos com estatísticas D10/0 · Preços FIPE mai/2026
+      </div>
+    </div>
+    <div class="header-meta">
+      REV 1.0 · ARCANUM ARCANORUM<br>
+      CLASSIFICAÇÃO: VIGILIS+<br>
+      ACESSO: GRAU I
+    </div>
+  </header>
+
+  <!-- ══════════ INVESTIGAÇÃO ══════════ -->
+  <div class="cat-section cat-inv">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Equipamento de Investigação &amp; Vigilância</div>
+      <div class="cat-count">10 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Efeito em Jogo</th>
+          <th>Habilidade</th>
+          <th class="r">Preço (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Kit de Arrombar Fechaduras</div><div class="item-sub">ganchos, tensores, rake · profissional</div></td>
+          <td class="effect">−2 dif. em testes de arrombamento. Sem kit: +3 dif.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 180</td>
+          <td class="notes">Ilegal portar sem justificativa profissional.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Câmera de Vigilância Compacta</div><div class="item-sub">Full HD · Wi-Fi · bateria 8h</div></td>
+          <td class="effect">Monitora área sem presença física. Grave por até 8h.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 320</td>
+          <td class="notes">Tamanho de isqueiro. Pode ser disfarçada em objeto comum.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Gravador de Áudio Oculto</div><div class="item-sub">24h de gravação contínua · VOX</div></td>
+          <td class="effect">Registra conversas sem conhecimento alheio.</td>
+          <td><span class="skill-tag">Sensorial</span></td>
+          <td class="cost">R$ 220</td>
+          <td class="notes">Ativado por voz (VOX). Cabe no bolso do paletó.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Microfone Direcional</div><div class="item-sub">alcance 80m em ambiente aberto</div></td>
+          <td class="effect">Ouve conversas à distância. +2 dif. em ambientes ruidosos.</td>
+          <td><span class="skill-tag">Sensorial</span></td>
+          <td class="cost">R$ 1.800</td>
+          <td class="notes">Paraboloide + amplificador. Tamanho de guarda-chuva dobrado.</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Kit de Rastreamento GPS</div><div class="item-sub">magnético · SIM card · tempo real</div></td>
+          <td class="effect">Rastreia veículo em tempo real pelo celular.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 350</td>
+          <td class="notes">Bateria 30 dias em standby. Instalar: 1 AP embaixo do carro.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Binóculos Táticos 10×42</div><div class="item-sub">Bushnell / Vortex · revestimento anti-reflexo</div></td>
+          <td class="effect">−2 dif. em testes de Percepção visual a longa distância.</td>
+          <td><span class="skill-tag">Sensorial</span></td>
+          <td class="cost">R$ 680</td>
+          <td class="notes">À prova d'água. Indispensável em vigilância noturna com boa luz.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Binóculos com Visão Noturna</div><div class="item-sub">Gen I · amplificação de luz</div></td>
+          <td class="effect">Visão até 100m no escuro. Sem penalidade noturna.</td>
+          <td><span class="skill-tag">Sensorial</span></td>
+          <td class="cost">R$ 2.800</td>
+          <td class="notes">Geração I — funciona com luz ambiente mínima.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Câmera Endoscópica</div><div class="item-sub">sonda flexível 1m · USB · Full HD</div></td>
+          <td class="effect">Inspeciona locais inacessíveis. Ver sob portas, dentro de paredes.</td>
+          <td><span class="skill-tag">Sensorial</span></td>
+          <td class="cost">R$ 280</td>
+          <td class="notes">Cabeçote de 8mm. Essencial para inspeção sem arrombar.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Detector de Escuta (Bug Detector)</div><div class="item-sub">RF + magnético + câmera oculta</div></td>
+          <td class="effect">Revela gravadores e transmissores ocultos em um cômodo.</td>
+          <td><span class="skill-tag">Teoria</span></td>
+          <td class="cost">R$ 450</td>
+          <td class="notes">Varredura completa de cômodo médio: 3 AP. Não detecta escutas analógicas.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Impressora Portátil de Documento</div><div class="item-sub">com plastificador e laminadora</div></td>
+          <td class="effect">Produz documentos de aparência convincente.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 1.100</td>
+          <td class="notes">Sem holograma ou chip NFC. Não engana leitores eletrônicos.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ TECNOLOGIA ══════════ -->
+  <div class="cat-section cat-tech">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Tecnologia &amp; Comunicação</div>
+      <div class="cat-count">08 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Efeito em Jogo</th>
+          <th>Habilidade</th>
+          <th class="r">Preço (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Laptop Reforçado</div><div class="item-sub">Panasonic Toughbook / Dell Rugged</div></td>
+          <td class="effect">Necessário para hacking e análise digital. −1 dif. em teoria.</td>
+          <td><span class="skill-tag">Teoria</span></td>
+          <td class="cost">R$ 8.500</td>
+          <td class="notes">À prova de choque, poeira e água. Funciona a −20°C a +60°C.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Rádio Comunicador Criptografado</div><div class="item-sub">par · criptografia AES-256 · 5km</div></td>
+          <td class="effect">Comunicação segura sem interceptação. Alcance 5km urbano.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 1.400</td>
+          <td class="notes">Preço por par. Bateria 18h. Essencial em missões em grupo.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Celular Seguro (Burner Phone)</div><div class="item-sub">chip pré-pago · descartável</div></td>
+          <td class="effect">Comunicação sem rastreio por 30 dias.</td>
+          <td><span class="skill-tag">—</span></td>
+          <td class="cost">R$ 120</td>
+          <td class="notes">Chip comprado em nome falso. Após uso, descartar.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Drone de Reconhecimento</div><div class="item-sub">câmera 4K · 30min voo · silencioso</div></td>
+          <td class="effect">Vigilância aérea sem presença. −2 dif. em reconhecimento de área.</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="cost">R$ 3.200</td>
+          <td class="notes">Alcance 2km. Detectável por radar. Silencioso a 50m de altitude.</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Jammer de Frequência</div><div class="item-sub">bloqueador RF · 2G/3G/4G/GPS · 20m</div></td>
+          <td class="effect">Bloqueia celulares, GPS e comunicação sem fio num raio de 20m.</td>
+          <td><span class="skill-tag">Teoria</span></td>
+          <td class="cost">R$ 1.800</td>
+          <td class="notes">Ilegal no Brasil (ANATEL). Uso afeta TODOS na área, incluindo o grupo.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Kit de Clonagem de Cartão</div><div class="item-sub">skimmer + leitor RFID/NFC</div></td>
+          <td class="effect">Clona crachás e cartões de acesso em menos de 1 segundo.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 650</td>
+          <td class="notes">Funciona a até 10cm. Não burla sistemas com PIN ou biometria.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Impressora 3D Portátil</div><div class="item-sub">FDM de bancada · filamento PLA/ABS</div></td>
+          <td class="effect">Fabrica peças, ferramentas e suportes em campo.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 2.200</td>
+          <td class="notes">Peça simples: 1–3h. Requer Vocacional para calibrar e operar.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Analisador de Espectro Portátil</div><div class="item-sub">detecção de sinais RF 1MHz–3GHz</div></td>
+          <td class="effect">Localiza transmissores, bugs, câmeras e balizas ocultas.</td>
+          <td><span class="skill-tag">Teoria</span></td>
+          <td class="cost">R$ 3.800</td>
+          <td class="notes">Versão avançada do bug detector. Detecta inclusive sinais analógicos.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ MÉDICO ══════════ -->
+  <div class="cat-section cat-medical">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Equipamento Médico &amp; Sobrevivência</div>
+      <div class="cat-count">07 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Efeito em Jogo</th>
+          <th>Habilidade</th>
+          <th class="r">Preço (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Kit IFAK (Primeiros Socorros Táticos)</div><div class="item-sub">torniquete, curativo hemostático, bandagem</div></td>
+          <td class="effect">Estabiliza personagem Morrendo por 1d10 horas. +2 HP imediato.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 380</td>
+          <td class="notes">Padrão militar. Essencial em campo. Uso único por kit.</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Kit Médico Completo</div><div class="item-sub">sutura, soro, morfina, antibióticos</div></td>
+          <td class="effect">Trata Condições de Saúde moderadas em campo. Reduz tempo de cura à metade.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 1.200</td>
+          <td class="notes">Requer Vocacional (Paramédico) para uso pleno. Sim, tem morfina.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Adrenalina (Epinefrina)</div><div class="item-sub">seringa autoaplicável · EpiPen</div></td>
+          <td class="effect">Personagem No Limite age normalmente por 1d10+2 rodadas.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 280</td>
+          <td class="notes">Após o efeito: −2 em todos os atributos por 1 hora (crash).</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Sedativo de Ação Rápida</div><div class="item-sub">midazolam / ketamina · seringa</div></td>
+          <td class="effect">Alvo dorme em 1d10 rodadas. Dura 1d10×10 minutos.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 220</td>
+          <td class="notes">Injeção deve atingir músculo. Resistência: teste Endurance dif. 3.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Máscara Antigás / CBRN</div><div class="item-sub">full-face · filtro NBC</div></td>
+          <td class="effect">Imunidade a gás, fumaça e agentes químicos enquanto vestida.</td>
+          <td><span class="skill-tag">—</span></td>
+          <td class="cost">R$ 950</td>
+          <td class="notes">Filtro dura 8h contínuas. Reposição do filtro: R$ 180.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Estimulante Cognitivo</div><div class="item-sub">Modafinil / anfetamina controlada</div></td>
+          <td class="effect">+1 IN e +1 PE por 6 horas. Dispensa sono nessa janela.</td>
+          <td><span class="skill-tag">—</span></td>
+          <td class="cost">R$ 90</td>
+          <td class="notes">Após efeito: −1 SP e −1 FO por 8h. Controlado (Receita B).</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Desfibrilador Portátil (DEA)</div><div class="item-sub">automatizado · Zoll AED Plus</div></td>
+          <td class="effect">Segunda chance para personagem Morto há menos de 1 rodada. Teste Endurance dif. 4.</td>
+          <td><span class="skill-tag">Vocacional</span></td>
+          <td class="cost">R$ 4.500</td>
+          <td class="notes">Uma tentativa por evento. Falha significa morte permanente.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ OCULTISMO ══════════ -->
+  <div class="cat-section cat-occult">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Ferramentas Ocultistas &amp; Arcanistas</div>
+      <div class="cat-count">08 itens</div>
+    </div>
+    <table class="eq-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Efeito em Jogo</th>
+          <th>Habilidade</th>
+          <th class="r">Preço (R$)</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="item-name">Diário Encriptado de Campo</div><div class="item-sub">capa de couro, páginas endurecidas, cifra</div></td>
+          <td class="effect">Registra magias sem violar o Tenet V (conhecimento cifrado).</td>
+          <td><span class="skill-tag">—</span></td>
+          <td class="cost">R$ 180</td>
+          <td class="notes">Padrão Arcanum para agentes de campo. Emitido pela Ordem.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Detector de Resíduo Mágico</div><div class="item-sub">instrumento arcano · calibrado pelo Arcanum</div></td>
+          <td class="effect">Detecta uso recente de magia em até 30m. Indica Domínio usado.</td>
+          <td><span class="skill-tag hi">Arcanismo</span></td>
+          <td class="cost">R$ 6.500</td>
+          <td class="notes">Produzido internamente pela Ordem. Não disponível no mercado civil.</td>
+        </tr>
+        <tr class="featured">
+          <td><div class="item-name">Kit de Ritual Portátil</div><div class="item-sub">círculo dobrável, velas, selos, incenso</div></td>
+          <td class="effect">Reduz custo de Mana em rituais em −1. Melhora foco em Grandes Rituais.</td>
+          <td><span class="skill-tag hi">Arcanismo</span></td>
+          <td class="cost">R$ 850</td>
+          <td class="notes">Reposição mensal de consumíveis: R$ 120. Cabe numa mochila de 20L.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Sal Consagrado (500g)</div><div class="item-sub">abençoado por sacerdote autorizado</div></td>
+          <td class="effect">Cria barreira contra entidades de Trevas e Espíritos. Dif. de travessia: 3.</td>
+          <td><span class="skill-tag">Sensorial</span></td>
+          <td class="cost">R$ 60</td>
+          <td class="notes">Bênção precisa ser de membro autorizado do Arcanum (Igreja ou Druida).</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Tinta de Sangue Sintético</div><div class="item-sub">formulação arcana estabilizada</div></td>
+          <td class="effect">Substitui sangue em selos e rituais. Sem a penalidade de dano de HP.</td>
+          <td><span class="skill-tag hi">Arcanismo</span></td>
+          <td class="cost">R$ 320</td>
+          <td class="notes">Eficácia 80% do sangue real. Alguns rituais antigos exigem o real.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Amuleto de Proteção (Grau I)</div><div class="item-sub">inscrito pelo Arcanum</div></td>
+          <td class="effect">Ajuste −3F contra dano de origem mágica (Domínio específico).</td>
+          <td><span class="skill-tag">—</span></td>
+          <td class="cost">R$ 2.200</td>
+          <td class="notes">Especificar Domínio na compra (ex: Trevas, Fogo). Um por personagem.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Pergaminho de Feitiço Pré-Carregado</div><div class="item-sub">único uso · Grau 3–4</div></td>
+          <td class="effect">Conjura o feitiço inscrito sem custo de Mana. Destrói o pergaminho.</td>
+          <td><span class="skill-tag hi">Arcanismo</span></td>
+          <td class="cost">R$ 1.800</td>
+          <td class="notes">Preço varia com Grau e Domínio. Grau 5–6 pode triplicar o valor.</td>
+        </tr>
+        <tr>
+          <td><div class="item-name">Grimório de Domínio</div><div class="item-sub">obra rara · manuscrito ou impresso</div></td>
+          <td class="effect">Estudo completo: +1 ponto no Domínio específico (requer 1 semana).</td>
+          <td><span class="skill-tag hi">Arcanismo</span></td>
+          <td class="cost">R$ 12.000</td>
+          <td class="notes">Preço médio. Obras raras ou de Domínios Arcanos podem custar muito mais.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ VEÍCULOS ══════════ -->
+  <div class="cat-section cat-vehicle">
+    <div class="cat-header">
+      <div class="cat-pip"></div>
+      <div class="cat-title">Veículos — Estatísticas &amp; Preços</div>
+      <div class="cat-count">14 veículos</div>
+    </div>
+
+    <!-- stat legend -->
+    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:0.1em;">
+      <span>VEL = Velocidade máx. (km/h)</span>
+      <span>AG = Bônus de Agilidade do veículo</span>
+      <span>ARM = Blindagem (Ajuste de dano)</span>
+      <span>CAP = Capacidade (pessoas ou carga)</span>
+      <span>HP = Pontos de estrutura do veículo</span>
+    </div>
+
+    <table class="veh-table">
+      <thead>
+        <tr>
+          <th>Veículo</th>
+          <th class="c">Vel.</th>
+          <th class="c">AG</th>
+          <th class="c">ARM</th>
+          <th class="c">CAP</th>
+          <th class="c">HP</th>
+          <th>Habilidade</th>
+          <th class="r">Preço (R$)</th>
+          <th>Notas Táticas</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- MOTOS -->
+        <tr>
+          <td>
+            <span class="veh-type type-moto">MOTO</span>
+            <div class="item-name">Honda CG 160</div>
+            <div class="item-sub">popular · flex · 162cc</div>
+          </td>
+          <td class="vstat">120</td>
+          <td class="vstat">+2</td>
+          <td class="vstat">—</td>
+          <td class="vstat">1+1</td>
+          <td class="vstat">20</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 19.000</td>
+          <td class="vnotes">Fácil de encontrar e alugar. Sem proteção nenhuma ao piloto.</td>
+        </tr>
+
+        <tr>
+          <td>
+            <span class="veh-type type-moto">MOTO</span>
+            <div class="item-name">Honda CB 500X</div>
+            <div class="item-sub">trail · 471cc · ABS</div>
+          </td>
+          <td class="vstat">180</td>
+          <td class="vstat">+2</td>
+          <td class="vstat">—</td>
+          <td class="vstat">1+1</td>
+          <td class="vstat">25</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 38.000</td>
+          <td class="vnotes">On/off-road. Ideal para seguimentos e fuga em área urbana e rural.</td>
+        </tr>
+
+        <tr class="featured">
+          <td>
+            <span class="veh-type type-moto">MOTO</span>
+            <div class="item-name">BMW R 1250 GS Adventure</div>
+            <div class="item-sub">grande trail · 1254cc · ASA / ABS</div>
+          </td>
+          <td class="vstat">200</td>
+          <td class="vstat">+1</td>
+          <td class="vstat">—</td>
+          <td class="vstat">1+1</td>
+          <td class="vstat">30</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 92.000</td>
+          <td class="vnotes">Pode cruzar continentes. Pesada — AG+1 só em asfalto. Baús laterais opcionais.</td>
+        </tr>
+
+        <tr>
+          <td>
+            <span class="veh-type type-moto">MOTO</span>
+            <div class="item-name">Kawasaki Ninja ZX-10R</div>
+            <div class="item-sub">supersport · 998cc · pista</div>
+          </td>
+          <td class="vstat">299</td>
+          <td class="vstat">+3</td>
+          <td class="vstat">—</td>
+          <td class="vstat">1</td>
+          <td class="vstat">20</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 115.000</td>
+          <td class="vnotes">Velocidade máxima absurda. AG+3 apenas em asfalto seco e reto. Fuga garantida em rodovias.</td>
+        </tr>
+
+        <!-- CARROS -->
+        <tr>
+          <td>
+            <span class="veh-type type-car">CARRO</span>
+            <div class="item-name">Volkswagen Polo / Fiat Argo</div>
+            <div class="item-sub">hatch popular · 1.0 turbo · flex</div>
+          </td>
+          <td class="vstat">170</td>
+          <td class="vstat">+1</td>
+          <td class="vstat">—</td>
+          <td class="vstat">5</td>
+          <td class="vstat">40</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 78.000</td>
+          <td class="vnotes">Discreto. Fácil de estacionar. Nada de especial, ideal para não chamar atenção.</td>
+        </tr>
+
+        <tr>
+          <td>
+            <span class="veh-type type-car">CARRO</span>
+            <div class="item-name">Honda Civic Sedã</div>
+            <div class="item-sub">sedã médio · 1.5 turbo · CVT</div>
+          </td>
+          <td class="vstat">210</td>
+          <td class="vstat">+1</td>
+          <td class="vstat">—</td>
+          <td class="vstat">5</td>
+          <td class="vstat">50</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 162.000</td>
+          <td class="vnotes">Confortável para seguimentos longos. Não levanta suspeita em ambientes corporativos.</td>
+        </tr>
+
+        <tr class="featured">
+          <td>
+            <span class="veh-type type-car">CARRO</span>
+            <div class="item-name">BMW Série 3 / Mercedes C 300</div>
+            <div class="item-sub">sedã de luxo · turbo · AWD</div>
+          </td>
+          <td class="vstat">250</td>
+          <td class="vstat">+2</td>
+          <td class="vstat">—</td>
+          <td class="vstat">5</td>
+          <td class="vstat">55</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 290.000</td>
+          <td class="vnotes">+1 CH em interações onde aparência importa. Acesso facilitado a ambientes de elite.</td>
+        </tr>
+
+        <!-- SUVs -->
+        <tr>
+          <td>
+            <span class="veh-type type-suv">SUV</span>
+            <div class="item-name">Jeep Renegade / VW T-Cross</div>
+            <div class="item-sub">SUV compacto · 1.3 turbo · FWD</div>
+          </td>
+          <td class="vstat">180</td>
+          <td class="vstat">+1</td>
+          <td class="vstat">—</td>
+          <td class="vstat">5</td>
+          <td class="vstat">50</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 130.000</td>
+          <td class="vnotes">Urbano. Terreno leve. O SUV "médio" que não levanta suspeita.</td>
+        </tr>
+
+        <tr class="featured">
+          <td>
+            <span class="veh-type type-suv">SUV</span>
+            <div class="item-name">Toyota SW4 / Land Cruiser Prado</div>
+            <div class="item-sub">SUV 4x4 · diesel · 7 lugares</div>
+          </td>
+          <td class="vstat">190</td>
+          <td class="vstat">+1</td>
+          <td class="vstat">—</td>
+          <td class="vstat">7</td>
+          <td class="vstat">70</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 340.000</td>
+          <td class="vnotes">Todo terreno real. Passa por rios rasos. Ideal para operações rurais ou em floresta.</td>
+        </tr>
+
+        <!-- PICAPES -->
+        <tr>
+          <td>
+            <span class="veh-type type-truck">PICAPE</span>
+            <div class="item-name">Fiat Toro / Chevrolet Montana</div>
+            <div class="item-sub">picape média · 1.3 turbo · flex</div>
+          </td>
+          <td class="vstat">180</td>
+          <td class="vstat">0</td>
+          <td class="vstat">—</td>
+          <td class="vstat">5 + carga</td>
+          <td class="vstat">55</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 140.000</td>
+          <td class="vnotes">Cabine dupla. Caçamba útil para equipamento. Discreta no interior do Brasil.</td>
+        </tr>
+
+        <tr class="featured">
+          <td>
+            <span class="veh-type type-truck">PICAPE</span>
+            <div class="item-name">Toyota Hilux / Ford Ranger</div>
+            <div class="item-sub">picape grande · 2.8 diesel · 4x4</div>
+          </td>
+          <td class="vstat">190</td>
+          <td class="vstat">+1</td>
+          <td class="vstat">—</td>
+          <td class="vstat">5 + carga</td>
+          <td class="vstat">80</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 280.000</td>
+          <td class="vnotes">O padrão ouro para operações de campo. Passa por quase qualquer terreno. HP alto.</td>
+        </tr>
+
+        <!-- VANS -->
+        <tr>
+          <td>
+            <span class="veh-type type-van">VAN</span>
+            <div class="item-name">Renault Master / Fiat Ducato</div>
+            <div class="item-sub">van de carga · diesel · L3H2</div>
+          </td>
+          <td class="vstat">150</td>
+          <td class="vstat">−1</td>
+          <td class="vstat">—</td>
+          <td class="vstat">3 + 14m³</td>
+          <td class="vstat">65</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 195.000</td>
+          <td class="vnotes">Interior vazio: base móvel, posto de escuta, transporte sigiloso de pessoas ou material.</td>
+        </tr>
+
+        <tr class="featured">
+          <td>
+            <span class="veh-type type-van">VAN</span>
+            <div class="item-name">Van de Vigilância Equipada</div>
+            <div class="item-sub">Master/Ducato adaptado · Arcanum</div>
+          </td>
+          <td class="vstat">140</td>
+          <td class="vstat">−1</td>
+          <td class="vstat">—</td>
+          <td class="vstat">2 + posto</td>
+          <td class="vstat">65</td>
+          <td><span class="skill-tag">Navegação</span></td>
+          <td class="vcost">R$ 320.000</td>
+          <td class="vnotes">Interno: bancada, monitores, rádio criptografado, gerador, câmeras externas 360°. Fornecida pela Ordem.</td>
+        </tr>
+
+        <!-- ESPECIAL -->
+        <tr class="featured">
+          <td>
+            <span class="veh-type type-spec">ESPECIAL</span>
+            <div class="item-name">Blindagem Nível III-A</div>
+            <div class="item-sub">retrofit para qualquer veículo · vidros, portas, piso</div>
+          </td>
+          <td class="vstat">−20</td>
+          <td class="vstat">−1</td>
+          <td class="vstat">−10F −2R</td>
+          <td class="vstat">mesmo</td>
+          <td class="vstat">+30</td>
+          <td><span class="skill-tag">—</span></td>
+          <td class="vcost">R$ 85.000</td>
+          <td class="vnotes">Instalado em qualquer veículo. Perde 20km/h de velocidade máxima. Resistente a pistolas e SMGs.</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- FOOTNOTES -->
+  <div class="footnotes">
+    <div>
+      <div class="fn-title">Estatísticas de Veículos</div>
+      <div class="fn-row"><span class="fn-key">VEL</span><span class="fn-val">Velocidade máxima em km/h. Perseguições: compare VEL e role Navegação</span></div>
+      <div class="fn-row"><span class="fn-key">AG</span><span class="fn-val">Modificador no atributo AG do piloto para manobras. Negativo = veículo difícil</span></div>
+      <div class="fn-row"><span class="fn-key">ARM</span><span class="fn-val">Ajuste de dano aplicado a todos os ocupantes enquanto dentro do veículo</span></div>
+      <div class="fn-row"><span class="fn-key">CAP</span><span class="fn-val">Pessoas + carga. "1+1" = piloto + garupa. "5 + carga" = 5 pessoas e espaço de carga</span></div>
+      <div class="fn-row"><span class="fn-key">HP</span><span class="fn-val">Pontos de estrutura do veículo. Ao atingir 0: imobilizado. Abaixo: explode (dano Kilo na área)</span></div>
+    </div>
+    <div>
+      <div class="fn-title">Perseguições de Veículo</div>
+      <div class="fn-row"><span class="fn-key">Fugir</span><span class="fn-val">Comparar VEL + Navegação (Total) dos veículos. Maior resultado mantém ou ganha distância</span></div>
+      <div class="fn-row"><span class="fn-key">Ram</span><span class="fn-val">Colisão deliberada: dano = 1D×10 por 50km/h de velocidade, para ambos os veículos</span></div>
+      <div class="fn-row"><span class="fn-key">Atirar</span><span class="fn-val">Da janela/moto: +2 dificuldade. Do passageiro: +1 dificuldade</span></div>
+      <div class="fn-row"><span class="fn-key">Pneus</span><span class="fn-val">Acertar pneus: dif. 3. Sucesso: −50km/h VEL, −2 AG ao veículo</span></div>
+      <div class="fn-row"><span class="fn-key">Motos</span><span class="fn-val">Motos sem ARM: piloto recebe dano direto se o veículo for atingido</span></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
