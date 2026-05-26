@@ -37,23 +37,6 @@
     </div>
   </header>
 
-  <!-- CALIBER INDEX -->
-  <div class="caliber-index">
-    <span style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--text-dim);letter-spacing:0.2em;align-self:center;">CALIBRES COBERTOS ▸</span>
-    <span class="cal-tag">.38 SPL</span>
-    <span class="cal-tag">9mm</span>
-    <span class="cal-tag">.45 ACP</span>
-    <span class="cal-tag">.44 Mag</span>
-    <span class="cal-tag">5.56mm</span>
-    <span class="cal-tag">.308 Win</span>
-    <span class="cal-tag">7.62×39</span>
-    <span class="cal-tag">7.62×51</span>
-    <span class="cal-tag">.50 BMG</span>
-    <span class="cal-tag">12ga</span>
-    <span class="cal-tag">Flechas</span>
-    <span class="cal-tag">40mm</span>
-  </div>
-
   <!-- ══════════ MUNIÇÃO ══════════ -->
   <div class="cat-section cat-ammo">
     <div class="cat-header">
@@ -64,12 +47,12 @@
     <table class="eq-table">
       <thead>
         <tr>
-          <th>Calibre / Tipo</th>
-          <th>Qtd. / caixa</th>
-          <th>Efeito no Dano</th>
-          <th>Compatibilidade</th>
-          <th class="r">Preço (R$)</th>
-          <th class="r">Legalidade</th>
+          <th>Calibre</th>
+          <th>Caixa (qtd)</th>
+          <th class="effect">Efeito</th>
+          <th>Compat.</th>
+          <th class="r">Preço</th>
+          <th class="r">Legal</th>
           <th>Notas</th>
         </tr>
       </thead>
@@ -81,7 +64,7 @@
           <td class="dmg-neu dmg-mod">Base</td>
           <td><div class="compat"><span class="badge">Revólver .38</span></div></td>
           <td class="cost">R$ 340</td>
-          <td><span class="flag-legal">● LEGAL</span></td>
+          <td><span class="flag-legal">●</span></td>
           <td class="notes">Munição mais comum do Brasil. Fácil de encontrar.</td>
         </tr>
 
@@ -91,7 +74,7 @@
           <td class="dmg-up dmg-mod">+1D, não penetra armadura</td>
           <td><div class="compat"><span class="badge">Revólver .38</span></div></td>
           <td class="cost">R$ 280</td>
-          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td><span class="flag-gray">◐</span></td>
           <td class="notes">Expande no alvo. Dano adicional em carne, não atravessa colete.</td>
         </tr>
 
@@ -101,7 +84,7 @@
           <td class="dmg-neu dmg-mod">Base</td>
           <td><div class="compat"><span class="badge">Pistola 9mm</span><span class="badge">P. Compacta</span><span class="badge">SMG</span></div></td>
           <td class="cost">R$ 490</td>
-          <td><span class="flag-legal">● LEGAL</span></td>
+          <td><span class="flag-legal">●</span></td>
           <td class="notes">Padrão militar/policial brasileiro. Onipresente.</td>
         </tr>
 
@@ -111,7 +94,7 @@
           <td class="dmg-up dmg-mod">+1F, não penetra armadura</td>
           <td><div class="compat"><span class="badge">Pistola 9mm</span><span class="badge">P. Compacta</span></div></td>
           <td class="cost">R$ 350</td>
-          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td><span class="flag-gray">◐</span></td>
           <td class="notes">Pressão extra. Não usar em armas antigas ou danificadas.</td>
         </tr>
 
@@ -121,7 +104,7 @@
           <td class="dmg-down dmg-mod">−1F, silencia com supressor</td>
           <td><div class="compat"><span class="badge">Pistola 9mm</span><span class="badge">SMG</span></div></td>
           <td class="cost">R$ 620</td>
-          <td><span class="flag-legal">● LEGAL</span></td>
+          <td><span class="flag-legal">●</span></td>
           <td class="notes">Sem estouro supersônico. Essencial com supressor.</td>
         </tr>
 
@@ -131,7 +114,7 @@
           <td class="dmg-neu dmg-mod">Base</td>
           <td><div class="compat"><span class="badge">Pistola .45</span></div></td>
           <td class="cost">R$ 680</td>
-          <td><span class="flag-legal">● LEGAL</span></td>
+          <td><span class="flag-legal">●</span></td>
           <td class="notes">Alta massa, baixa velocidade. Bom stopping power.</td>
         </tr>
 
@@ -141,7 +124,7 @@
           <td class="dmg-neu dmg-mod">Base</td>
           <td><div class="compat"><span class="badge">Pistola .44</span></div></td>
           <td class="cost">R$ 900</td>
-          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td><span class="flag-gray">◐</span></td>
           <td class="notes">Calibre restrito no Brasil. Requer CR de atirador.</td>
         </tr>
 
@@ -151,7 +134,7 @@
           <td class="dmg-neu dmg-mod">Base</td>
           <td><div class="compat"><span class="badge">Fuzil de Assalto</span><span class="badge">Carabina .223</span></div></td>
           <td class="cost">R$ 280</td>
-          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td><span class="flag-gray">◐</span></td>
           <td class="notes">Munição padrão OTAN. Alta velocidade, fragmenta no alvo.</td>
         </tr>
 
@@ -161,7 +144,7 @@
           <td class="dmg-neu dmg-mod">Base</td>
           <td><div class="compat"><span class="badge">Rifle de Caça</span><span class="badge">Sniper 7.62</span></div></td>
           <td class="cost">R$ 420</td>
-          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td><span class="flag-gray">◐</span></td>
           <td class="notes">Excelente precisão a longas distâncias. Penetra vidro blindado leve.</td>
         </tr>
 
@@ -171,7 +154,7 @@
           <td class="dmg-up dmg-mod">+2F a longa distância</td>
           <td><div class="compat"><span class="badge">Rifle de Caça</span><span class="badge">Sniper 7.62</span></div></td>
           <td class="cost">R$ 750</td>
-          <td><span class="flag-gray">◐ RESTRITO</span></td>
+          <td><span class="flag-gray">◐</span></td>
           <td class="notes">Para tiro de precisão. +2F se distância > 200m.</td>
         </tr>
 
@@ -181,7 +164,7 @@
           <td class="dmg-up dmg-mod">Ignora armaduras leves</td>
           <td><div class="compat"><span class="badge hi">Rifle Anti-Material</span></div></td>
           <td class="cost">R$ 1.400</td>
-          <td><span class="flag-illegal">✕ ILEGAL (civil)</span></td>
+          <td><span class="flag-illegal">✕</span></td>
           <td class="notes">Apenas militar/policial. Perfura veículos e paredes de concreto.</td>
         </tr>
 
@@ -191,7 +174,7 @@
           <td class="dmg-neu dmg-mod">Base (Blast Fire)</td>
           <td><div class="compat"><span class="badge">Escopeta Cal.12</span><span class="badge">Semi-auto</span><span class="badge">Duplo</span><span class="badge">Tática</span></div></td>
           <td class="cost">R$ 180</td>
-          <td><span class="flag-legal">● LEGAL</span></td>
+          <td><span class="flag-legal">●</span></td>
           <td class="notes">Padrão de defesa. Múltiplos projéteis simultâneos.</td>
         </tr>
 
@@ -201,7 +184,7 @@
           <td class="dmg-up dmg-mod">+5F, sem dispersão</td>
           <td><div class="compat"><span class="badge">Escopeta Cal.12</span><span class="badge">Semi-auto</span></div></td>
           <td class="cost">R$ 120</td>
-          <td><span class="flag-legal">● LEGAL</span></td>
+          <td><span class="flag-legal">●</span></td>
           <td class="notes">Projétil único de alta energia. Sem efeito Blast Fire — trata como rifle (alcance 60m).</td>
         </tr>
 
@@ -211,7 +194,7 @@
           <td class="dmg-neu dmg-mod">Base</td>
           <td><div class="compat"><span class="badge">Arco Composto</span></div></td>
           <td class="cost">R$ 160</td>
-          <td><span class="flag-legal">● LEGAL</span></td>
+          <td><span class="flag-legal">●</span></td>
           <td class="notes">Silenciosas. Reutilizáveis se recuperadas intactas.</td>
         </tr>
 
@@ -231,7 +214,7 @@
         <tr>
           <th>Item</th>
           <th class="c">Capacidade</th>
-          <th>Compatibilidade</th>
+          <th>Compat.</th>
           <th class="c">Recarga (AP)</th>
           <th class="r">Preço (R$)</th>
           <th>Notas</th>
@@ -326,8 +309,8 @@
       <thead>
         <tr>
           <th>Item</th>
-          <th>Efeito em Jogo</th>
-          <th>Compatibilidade</th>
+          <th class="effect">Efeito</th>
+          <th>Compat.</th>
           <th class="r">Preço (R$)</th>
           <th>Notas</th>
         </tr>
@@ -405,8 +388,8 @@
       <thead>
         <tr>
           <th>Item</th>
-          <th>Efeito em Jogo</th>
-          <th>Compatibilidade</th>
+          <th class="effect">Efeito</th>
+          <th>Compat.</th>
           <th class="r">Preço (R$)</th>
           <th>Notas</th>
         </tr>
@@ -500,7 +483,7 @@
       <thead>
         <tr>
           <th>Item</th>
-          <th>Efeito em Jogo</th>
+          <th class="effect">Efeito</th>
           <th class="r">Preço (R$)</th>
           <th>Notas</th>
         </tr>
