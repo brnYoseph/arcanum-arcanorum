@@ -4,265 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Munição, Carregadores & Acessórios — D10/0</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap');
-
-:root {
-  --bg:          #0a0b0d;
-  --surface:     #111318;
-  --panel:       #161920;
-  --border:      #22262f;
-  --border-hi:   #353c4a;
-  --text:        #c8cdd8;
-  --text-dim:    #5a6070;
-  --text-mono:   #7a9a7a;
-  --accent:      #c9a84c;
-  --accent-dim:  #5a4a20;
-  --red:         #c03838;
-  --red-dim:     #4a1818;
-  --green:       #4a8a5a;
-  --silver:      #8fa3bb;
-
-  --cat-ammo:      #6a8a5a;
-  --cat-mag:       #5a7a9a;
-  --cat-optics:    #8a7a5a;
-  --cat-tactical:  #7a5a8a;
-  --cat-misc:      #6a6a5a;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 15px;
-  line-height: 1.5;
-  min-height: 100vh;
-}
-
-body::after {
-  content: '';
-  position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background: repeating-linear-gradient(
-    0deg, transparent, transparent 2px,
-    rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px
-  );
-}
-
-.page { position: relative; z-index: 1; max-width: 1060px; margin: 0 auto; padding: 0 20px 60px; }
-
-/* ── HEADER ── */
-header {
-  border-bottom: 1px solid var(--border);
-  padding: 36px 0 24px;
-  margin-bottom: 32px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  gap: 24px;
-}
-
-.doc-tag {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  color: var(--accent);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-  opacity: 0.7;
-}
-
-h1 {
-  font-size: clamp(28px, 4vw, 46px);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #e8e4dc;
-  line-height: 1;
-}
-
-h1 span { color: var(--accent); }
-
-.header-meta {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-  letter-spacing: 0.15em;
-  line-height: 2;
-  text-align: right;
-}
-
-/* ── CALIBER INDEX ── */
-.caliber-index {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 36px;
-}
-
-.cal-tag {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  padding: 4px 8px;
-  border: 1px solid var(--border-hi);
-  color: var(--text-dim);
-  background: var(--panel);
-  letter-spacing: 0.1em;
-  cursor: default;
-  transition: color 0.2s, border-color 0.2s;
-}
-.cal-tag:hover { color: var(--accent); border-color: var(--accent-dim); }
-
-/* ── CATEGORY SECTION ── */
-.cat-section { margin-bottom: 48px; }
-
-.cat-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-
-.cat-pip { width: 8px; height: 8px; flex-shrink: 0; }
-.cat-title { font-size: 11px; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase; flex: 1; }
-.cat-count { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); }
-
-.cat-ammo    .cat-pip { background: var(--cat-ammo); }
-.cat-ammo    .cat-title { color: var(--cat-ammo); }
-.cat-mag     .cat-pip { background: var(--cat-mag); }
-.cat-mag     .cat-title { color: var(--cat-mag); }
-.cat-optics  .cat-pip { background: var(--cat-optics); }
-.cat-optics  .cat-title { color: var(--cat-optics); }
-.cat-tactical .cat-pip { background: var(--cat-tactical); }
-.cat-tactical .cat-title { color: var(--cat-tactical); }
-.cat-misc    .cat-pip { background: var(--cat-misc); }
-.cat-misc    .cat-title { color: var(--cat-misc); }
-
-/* ── TABLE ── */
-.eq-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-
-.eq-table thead tr { background: var(--surface); }
-
-.eq-table th {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-align: left;
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border-hi);
-  white-space: nowrap;
-  font-weight: 400;
-}
-.eq-table th.r { text-align: right; }
-.eq-table th.c { text-align: center; }
-
-.eq-table td {
-  padding: 9px 12px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-}
-.eq-table tr:last-child td { border-bottom: none; }
-.eq-table tr:hover td { background: rgba(255,255,255,0.02); }
-tr.featured td { background: rgba(201,168,76,0.03); }
-
-.item-name { font-size: 15px; font-weight: 600; color: #ddd8cc; letter-spacing: 0.02em; }
-.item-sub { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); margin-top: 1px; }
-
-td.mono { font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--text-mono); }
-td.r    { text-align: right; }
-td.c    { text-align: center; }
-
-td.cost {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  color: var(--accent);
-  text-align: right;
-  white-space: nowrap;
-}
-
-td.effect {
-  font-size: 12px;
-  color: var(--silver);
-  font-style: italic;
-}
-
-td.notes {
-  font-size: 12px;
-  color: var(--text-dim);
-  font-style: italic;
-  max-width: 240px;
-}
-
-/* compatibility badges */
-.compat {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-}
-.badge {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  padding: 1px 5px;
-  border: 1px solid var(--border-hi);
-  color: var(--text-dim);
-  background: var(--surface);
-  white-space: nowrap;
-}
-.badge.hi { border-color: var(--accent-dim); color: var(--accent); }
-
-/* damage mod tag */
-.dmg-mod {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  white-space: nowrap;
-}
-.dmg-up   { color: #d4884a; }
-.dmg-down { color: var(--text-mono); }
-.dmg-neu  { color: var(--text-dim); }
-
-/* ── RULE ── */
-.rule { height: 1px; background: var(--border); margin: 0 0 40px; }
-
-/* ── FOOTNOTES ── */
-.footnotes {
-  margin-top: 48px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-
-.fn-title {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--accent-dim); margin-bottom: 10px;
-  padding-bottom: 6px; border-bottom: 1px solid var(--border);
-}
-.fn-row { display: flex; gap: 10px; margin-bottom: 5px; font-size: 13px; align-items: baseline; }
-.fn-key { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent); min-width: 90px; flex-shrink: 0; }
-.fn-val { color: var(--text-dim); }
-
-/* legality flag */
-.flag-legal   { color: var(--text-mono); font-size: 10px; font-family: 'Share Tech Mono', monospace; }
-.flag-illegal { color: var(--red);       font-size: 10px; font-family: 'Share Tech Mono', monospace; }
-.flag-gray    { color: #8a7a5a;          font-size: 10px; font-family: 'Share Tech Mono', monospace; }
-
-@media (max-width: 700px) {
-  .footnotes { grid-template-columns: 1fr; }
-  header { grid-template-columns: 1fr; }
-  .header-meta { text-align: left; }
-  td.notes { display: none; }
-}
-</style>
+<link rel="stylesheet" href="styles/equip.css">
 </head>
-<body>
+<body class="equip-page">
+<nav class="aa-nav">
+  <div class="aa-nav-inner">
+    <a class="aa-nav-logo" href="index.html">&#9670; AA</a>
+    <div class="aa-nav-links">
+      <a href="codex.html">Codex</a>
+      <a href="ficha-conjurador.html">Ficha do Conjurador</a>
+      <a href="equip-armas-armaduras.html">Arsenal</a>
+      <a href="equip-municao-acessorios.html" class="active">Munição &amp; Acessórios</a>
+      <a href="equip-campo-veiculos.html">Campo &amp; Veículos</a>
+    </div>
+  </div>
+</nav>
 <div class="page">
 
   <!-- HEADER -->
@@ -270,7 +26,7 @@ td.notes {
     <div>
       <div class="doc-tag">D10/0 System · Arcanum Arcanorum · Suplemento de Campo — Vol. II</div>
       <h1>Munição, Carregadores <span>&amp;</span> Acessórios</h1>
-      <div style="font-size:13px;color:var(--text-dim);margin-top:6px;font-style:italic;">
+      <div style="font-size:16px;color:var(--text-dim);margin-top:6px;font-style:italic;">
         Preços de referência em R$ · Base: mercado brasileiro, mai/2026 · Valores civis; mercado negro ×3 a ×8
       </div>
     </div>
@@ -283,7 +39,7 @@ td.notes {
 
   <!-- CALIBER INDEX -->
   <div class="caliber-index">
-    <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:0.2em;align-self:center;">CALIBRES COBERTOS ▸</span>
+    <span style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--text-dim);letter-spacing:0.2em;align-self:center;">CALIBRES COBERTOS ▸</span>
     <span class="cal-tag">.38 SPL</span>
     <span class="cal-tag">9mm</span>
     <span class="cal-tag">.45 ACP</span>

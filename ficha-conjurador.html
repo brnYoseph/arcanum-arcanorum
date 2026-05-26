@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha do Conjurador — D10/0</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  :root {
+    --ink:       #1a1410;
+    --ink-light: #3d2f22;
+    --parchment: #f5edd8;
+    --parchment-dark: #e8d9b8;
+    --parchment-darker: #d9c89a;
+    --rule:      #b8995a;
+    --rule-light: #d4b87a;
+    --accent:    #7a2d2d;
+    --accent-light: #a04040;
+    --blue-ink:  #1d3d5c;
+    --grid:      rgba(184,153,90,0.18);
+    --shadow:    rgba(26,20,16,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #2a2018;
+    font-family: 'Crimson Pro', Georgia, serif;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 46px 16px 32px;
+    min-height: 100vh;
+  }
+
+  /* ── PAGE ── */
+  .page {
+    background: var(--parchment);
+    width: 210mm;
+    min-height: 297mm;
+    padding: 14mm 14mm 12mm;
+    position: relative;
+    box-shadow: 0 8px 48px rgba(0,0,0,0.55), inset 0 0 60px rgba(184,153,90,0.08);
+    page-break-after: always;
+    margin-bottom: 24px;
+  }
+
+  /* subtle graph paper */
+  .page::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 5mm 5mm;
+    pointer-events: none;
+  }
+
+  /* torn-edge top shadow */
+  .page::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.18), transparent);
+    pointer-events: none;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    border-bottom: 2.5px double var(--rule);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .header-left { display: flex; align-items: center; gap: 6px; }
+  .header-right { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+
+  .dice-mark {
+    font-size: 22px; line-height: 1;
+    color: var(--rule);
+    opacity: 0.7;
+  }
+
+  .page-title {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .page-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: 8.5px;
+    letter-spacing: 0.2em;
+    color: var(--rule);
+    text-align: center;
+    margin-top: 2px;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--parchment-dark);
+    border-top: 1.5px solid var(--rule);
+    border-bottom: 1px solid var(--rule-light);
+    padding: 3px 8px;
+    margin-bottom: 7px;
+    position: relative;
+  }
+
+  .section-title::before {
+    content: '✦';
+    margin-right: 6px;
+    color: var(--rule);
+    font-size: 8px;
+  }
+
+  /* ── IDENTITY BLOCK ── */
+  .identity-block {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 0 10px;
+    margin-bottom: 12px;
+  }
+
+  .field-group { display: flex; flex-direction: column; }
+
+  .field-label {
+    font-family: 'Cinzel', serif;
+    font-size: 7px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rule);
+    margin-bottom: 2px;
+  }
+
+  .field-line {
+    border-bottom: 1px solid var(--rule);
+    height: 16px;
+    background: transparent;
+  }
+
+  /* ── MANA BLOCK ── */
+  .mana-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+    align-items: start;
+  }
+
+  .mana-box {
+    border: 1.5px solid var(--rule);
+    background: var(--parchment-dark);
+    padding: 6px 8px;
+    position: relative;
+  }
+
+  .mana-box-title {
+    font-family: 'Cinzel', serif;
+    font-size: 7.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--rule-light);
+    padding-bottom: 3px;
+  }
+
+  .mana-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .mana-value {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .mana-value .field-label { text-align: center; font-size: 6.5px; }
+
+  .mana-square {
+    width: 36px; height: 28px;
+    border: 1.5px solid var(--rule);
+    background: var(--parchment);
+  }
+
+  /* mana bubbles */
+  .mana-bubbles {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    padding: 4px 0;
+  }
+  .bubble {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rule);
+    background: var(--parchment);
+    display: inline-block;
+  }
+
+  /* ── SCORE GRID ── */
+  .score-grid {
+    display: grid;
+    gap: 0;
+    margin-bottom: 12px;
+  }
+
+  .score-header {
+    display: grid;
+    grid-template-columns: 1fr repeat(5,28px) 28px;
+    gap: 2px;
+    margin-bottom: 3px;
+    padding: 0 2px;
+  }
+
+  .score-col-label {
+    font-family: 'Cinzel', serif;
+    font-size: 7px;
+    letter-spacing: 0.12em;
+    color: var(--rule);
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .score-row {
+    display: grid;
+    grid-template-columns: 1fr repeat(5,28px) 28px;
+    gap: 2px;
+    margin-bottom: 2px;
+    align-items: center;
+  }
+
+  .score-row-label {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--ink-light);
+    padding: 0 4px;
+  }
+
+  .score-row-label.domain {
+    font-size: 8.5px;
+    font-weight: 400;
+    font-style: italic;
+    padding-left: 12px;
+    color: var(--blue-ink);
+  }
+
+  .score-row-label.group {
+    font-family: 'Cinzel', serif;
+    font-size: 7.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    font-style: normal;
+    padding-left: 4px;
+  }
+
+  .score-pip {
+    width: 28px; height: 16px;
+    border: 1.5px solid var(--rule);
+    background: var(--parchment);
+    position: relative;
+  }
+
+  .score-pip.total {
+    background: var(--parchment-darker);
+    border-color: var(--rule);
+    border-width: 2px;
+  }
+
+  .score-separator {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: var(--rule-light);
+    opacity: 0.5;
+    margin: 4px 0;
+  }
+
+  .score-group-row {
+    grid-column: 1 / -1;
+    padding: 2px 0 1px;
+  }
+
+  /* ── TWO COLUMN LAYOUT ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  /* ── SPELL SLOTS ── */
+  .spell-slot {
+    border: 1px solid var(--rule-light);
+    background: var(--parchment);
+    padding: 6px 7px 5px;
+    margin-bottom: 6px;
+    position: relative;
+  }
+
+  .spell-slot::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--rule-light);
+  }
+
+  .spell-top {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 6px;
+    align-items: end;
+    margin-bottom: 4px;
+  }
+
+  .spell-name-line { border-bottom: 1px solid var(--rule); height: 16px; }
+
+  .spell-mini-field {
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+  }
+
+  .spell-mini-label {
+    font-family: 'Cinzel', serif;
+    font-size: 6px;
+    letter-spacing: 0.1em;
+    color: var(--rule);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .spell-mini-box {
+    width: 28px; height: 16px;
+    border: 1px solid var(--rule);
+    background: var(--parchment-dark);
+  }
+
+  .spell-desc-line {
+    border-bottom: 1px solid var(--rule-light);
+    height: 13px;
+    margin-bottom: 2px;
+  }
+
+  /* ── RITUAL NOTES ── */
+  .ritual-area {
+    margin-bottom: 12px;
+  }
+
+  .lined-area {
+    display: flex; flex-direction: column; gap: 0;
+  }
+
+  .text-line {
+    border-bottom: 1px solid var(--rule-light);
+    height: 16px;
+    margin-bottom: 1px;
+  }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    position: absolute;
+    bottom: 10mm;
+    left: 14mm; right: 14mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--rule-light);
+    padding-top: 4px;
+    font-size: 7px;
+    color: var(--rule);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.12em;
+  }
+
+  /* ── ORNAMENT ── */
+  .ornament {
+    text-align: center;
+    color: var(--rule-light);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    margin: 6px 0 8px;
+    opacity: 0.7;
+  }
+
+  /* ── NARROW SCORE: forms only row ── */
+  .forms-inline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .form-card {
+    border: 1.5px solid var(--rule);
+    background: var(--parchment-dark);
+    padding: 6px;
+    text-align: center;
+  }
+  .form-card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--rule-light);
+    padding-bottom: 3px;
+  }
+  .form-card-fields {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .form-card-value {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .form-card-box {
+    width: 32px; height: 24px;
+    border: 1.5px solid var(--rule);
+    background: var(--parchment);
+  }
+
+  /* pip row inside domain */
+  .pip-row {
+    display: flex; gap: 3px; justify-content: center; margin-top: 3px;
+  }
+  .pip {
+    width: 10px; height: 10px;
+    border: 1px solid var(--rule);
+    background: var(--parchment);
+  }
+
+  /* ── SPELLBOOK FULL-WIDTH ── */
+  .spell-full {
+    margin-bottom: 6px;
+    border: 1px solid var(--rule-light);
+    background: var(--parchment);
+    padding: 5px 7px 4px;
+    position: relative;
+  }
+  .spell-full::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--rule-light);
+  }
+  .spell-full-top {
+    display: grid;
+    grid-template-columns: 1fr 36px 36px 36px 36px;
+    gap: 5px;
+    align-items: end;
+    margin-bottom: 3px;
+  }
+  .spell-full-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .spell-label {
+    font-family: 'Cinzel', serif;
+    font-size: 6px;
+    color: var(--rule);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1px;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .page { box-shadow: none; margin: 0; width: 210mm; min-height: 297mm; }
+  }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap">
+</head>
+<body>
+<style>
+.aa-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  width: 100%;
+  background: rgba(10,11,13,0.97);
+  border-bottom: 1px solid #22262f;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.aa-nav-inner {
+  max-width: 1060px; margin: 0 auto;
+  padding: 0 20px;
+  display: flex; align-items: center; gap: 0;
+  height: 46px;
+}
+.aa-nav-logo {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px; color: #c9a84c;
+  text-decoration: none; letter-spacing: 0.2em;
+  padding-right: 24px; border-right: 1px solid #22262f;
+  margin-right: 20px; white-space: nowrap;
+  flex-shrink: 0;
+}
+.aa-nav-links {
+  display: flex; gap: 4px; flex-wrap: wrap;
+}
+.aa-nav-links a {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px; color: #5a6070;
+  text-decoration: none; padding: 6px 12px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.aa-nav-links a:hover,
+.aa-nav-links a.active {
+  color: #c9a84c;
+  border-color: #5a4a20;
+}
+</style>
+<nav class="aa-nav">
+  <div class="aa-nav-inner">
+    <a class="aa-nav-logo" href="index.html">&#9670; AA</a>
+    <div class="aa-nav-links">
+      <a href="codex.html">Codex</a>
+      <a href="ficha-conjurador.html" class="active">Ficha do Conjurador</a>
+      <a href="equip-armas-armaduras.html">Arsenal</a>
+      <a href="equip-municao-acessorios.html">Munição &amp; Acessórios</a>
+      <a href="equip-campo-veiculos.html">Campo &amp; Veículos</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════ PAGE 1 ════════════════ -->
+<div class="page">
+
+  <div class="page-header">
+    <div class="header-left">
+      <span class="dice-mark">⬟</span>
+      <span style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:0.15em;color:var(--rule);text-transform:uppercase;">D10/0 System</span>
+    </div>
+    <div style="text-align:center;">
+      <div class="page-title">Ficha do Conjurador</div>
+      <div class="page-subtitle">Suplemento Mágico · Formas &amp; Domínios</div>
+    </div>
+    <div class="header-right">
+      <span style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:0.15em;color:var(--rule);text-transform:uppercase;">v 0.80</span>
+      <span class="dice-mark">⬟</span>
+    </div>
+  </div>
+
+  <!-- identity -->
+  <div class="identity-block">
+    <div class="field-group">
+      <span class="field-label">Nome do Personagem</span>
+      <div class="field-line"></div>
+    </div>
+    <div class="field-group">
+      <span class="field-label">Tradição Mágica</span>
+      <div class="field-line"></div>
+    </div>
+    <div class="field-group">
+      <span class="field-label">Arcanismo (Total)</span>
+      <div class="field-line"></div>
+    </div>
+  </div>
+
+  <!-- MANA -->
+  <div class="section-title">Mana (Pontos de Poder)</div>
+  <div class="mana-block">
+    <div class="mana-box">
+      <div class="mana-box-title">Reserva de Mana</div>
+      <div class="mana-fields">
+        <div class="mana-value">
+          <span class="field-label">Normal</span>
+          <div class="mana-square"></div>
+          <span style="font-size:6.5px;color:var(--rule);font-style:italic;">(= Além)</span>
+        </div>
+        <div class="mana-value">
+          <span class="field-label">Atual</span>
+          <div class="mana-square"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mana-box">
+      <div class="mana-box-title">Rastreamento de Mana</div>
+      <div class="mana-bubbles">
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMAS -->
+  <div class="section-title">Formas Mágicas</div>
+  <div class="forms-inline">
+    <div class="form-card">
+      <div class="form-card-name">Criar</div>
+      <div style="font-size:7.5px;color:var(--ink-light);font-style:italic;line-height:1.4;">Invocar, manifestar,<br>originar, curar</div>
+      <div class="form-card-fields">
+        <div class="form-card-value">
+          <span class="field-label" style="font-size:6.5px;">Valor</span>
+          <div class="form-card-box"></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-card">
+      <div class="form-card-name">Controlar</div>
+      <div style="font-size:7.5px;color:var(--ink-light);font-style:italic;line-height:1.4;">Alterar, direcionar,<br>dominar, transformar</div>
+      <div class="form-card-fields">
+        <div class="form-card-value">
+          <span class="field-label" style="font-size:6.5px;">Valor</span>
+          <div class="form-card-box"></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-card">
+      <div class="form-card-name">Conhecer</div>
+      <div style="font-size:7.5px;color:var(--ink-light);font-style:italic;line-height:1.4;">Perceber, detectar,<br>ler, comunicar</div>
+      <div class="form-card-fields">
+        <div class="form-card-value">
+          <span class="field-label" style="font-size:6.5px;">Valor</span>
+          <div class="form-card-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOMÍNIOS -->
+  <div class="section-title">Domínios</div>
+
+  <!-- Score header -->
+  <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;margin-bottom:3px;padding:0 2px;">
+    <div></div>
+    <div style="font-family:'Cinzel',serif;font-size:6.5px;text-align:center;color:var(--rule);letter-spacing:0.08em;">CRIAR</div>
+    <div style="font-family:'Cinzel',serif;font-size:6.5px;text-align:center;color:var(--rule);letter-spacing:0.08em;">CTRL.</div>
+    <div style="font-family:'Cinzel',serif;font-size:6.5px;text-align:center;color:var(--rule);letter-spacing:0.08em;">CONH.</div>
+    <div></div>
+    <div style="font-family:'Cinzel',serif;font-size:6.5px;text-align:center;color:var(--accent);letter-spacing:0.08em;">TOTAL</div>
+  </div>
+
+  <!-- helper macro: domain row -->
+  <!-- ELEMENTAIS -->
+  <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;padding:2px 4px;margin-bottom:3px;border-left:2px solid var(--rule);">Elementais</div>
+
+  <!-- Each domain row: name | C | Ctrl | Conh | / | Total -->
+  <!-- Note: total = domínio value; if individual forms used, sum -->
+  <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:6px;">
+    <!-- Row template repeated 6x -->
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Água</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Fogo</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Terra</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Ar</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Luz</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Trevas</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+  </div>
+
+  <!-- ARCANAS -->
+  <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;padding:2px 4px;margin-bottom:3px;border-left:2px solid var(--rule);">Arcanas</div>
+  <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:6px;">
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Demonologia</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Espíritos</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Metamagia</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+  </div>
+
+  <!-- NATURAIS -->
+  <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;padding:2px 4px;margin-bottom:3px;border-left:2px solid var(--rule);">Naturais</div>
+  <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:10px;">
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Animais</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:120px repeat(3,32px) 8px 32px;gap:2px;align-items:center;">
+      <span style="font-size:9px;font-style:italic;color:var(--blue-ink);padding-left:8px;">Plantas</span>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="height:15px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+      <div style="text-align:center;color:var(--rule-light);font-size:9px;">/</div>
+      <div style="height:15px;border:2px solid var(--rule);background:var(--parchment-darker);"></div>
+    </div>
+  </div>
+
+  <!-- legend -->
+  <div style="border:1px solid var(--rule-light);padding:5px 8px;background:var(--parchment-dark);margin-bottom:8px;">
+    <span style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.12em;color:var(--rule);text-transform:uppercase;">Legenda · </span>
+    <span style="font-size:8px;color:var(--ink-light);">Colunas Criar/Controlar/Conhecer: preencha apenas se o valor diferir do Total. Total = valor do Domínio (se investido igualmente em todas as formas).</span>
+  </div>
+
+  <div class="page-footer">
+    <span>D10/0 System v0.80</span>
+    <span>✦ &nbsp; Ficha do Conjurador &nbsp; ✦</span>
+    <span>Página 1 · Formas &amp; Domínios</span>
+  </div>
+
+</div><!-- end page 1 -->
+
+
+<!-- ════════════════ PAGE 2 ════════════════ -->
+<div class="page">
+
+  <div class="page-header">
+    <div class="header-left">
+      <span class="dice-mark">⬟</span>
+      <span style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:0.15em;color:var(--rule);text-transform:uppercase;">D10/0 System</span>
+    </div>
+    <div style="text-align:center;">
+      <div class="page-title">Grimório</div>
+      <div class="page-subtitle">Registro de Feitiços &amp; Rituais</div>
+    </div>
+    <div class="header-right">
+      <span style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:0.15em;color:var(--rule);text-transform:uppercase;">v 0.80</span>
+      <span class="dice-mark">⬟</span>
+    </div>
+  </div>
+
+  <!-- identity mini -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+    <div class="field-group">
+      <span class="field-label">Nome do Personagem</span>
+      <div class="field-line"></div>
+    </div>
+    <div class="field-group">
+      <span class="field-label">Tradição Mágica</span>
+      <div class="field-line"></div>
+    </div>
+  </div>
+
+  <!-- REFERENCE STRIP -->
+  <div style="border:1.5px solid var(--rule);background:var(--parchment-dark);padding:5px 8px;margin-bottom:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+    <div>
+      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:4px;">Grau Mágico × Dificuldade</div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;">
+        <div style="font-family:'Cinzel',serif;font-size:6px;color:var(--rule);">GM</div>
+        <div style="font-size:8px;font-weight:600;">2</div>
+        <div style="font-size:8px;font-weight:600;">3</div>
+        <div style="font-size:8px;font-weight:600;">4</div>
+        <div style="font-size:8px;font-weight:600;">5</div>
+        <div style="font-size:8px;font-weight:600;">6</div>
+        <div style="font-size:8px;font-weight:600;">7+</div>
+        <div style="font-family:'Cinzel',serif;font-size:6px;color:var(--rule);">Dif.</div>
+        <div style="font-size:8px;color:var(--ink-light);">0</div>
+        <div style="font-size:8px;color:var(--ink-light);">1</div>
+        <div style="font-size:8px;color:var(--ink-light);">2</div>
+        <div style="font-size:8px;color:var(--ink-light);">3</div>
+        <div style="font-size:8px;color:var(--ink-light);">4</div>
+        <div style="font-size:8px;color:var(--ink-light);">5+</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:4px;">Custo de Mana × Grau</div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;">
+        <div style="font-family:'Cinzel',serif;font-size:6px;color:var(--rule);">GM</div>
+        <div style="font-size:8px;font-weight:600;">2</div>
+        <div style="font-size:8px;font-weight:600;">3</div>
+        <div style="font-size:8px;font-weight:600;">4–5</div>
+        <div style="font-size:8px;font-weight:600;">6</div>
+        <div style="font-size:8px;font-weight:600;">7</div>
+        <div style="font-size:8px;font-weight:600;">8</div>
+        <div style="font-family:'Cinzel',serif;font-size:6px;color:var(--rule);">Mana</div>
+        <div style="font-size:8px;color:var(--ink-light);">1</div>
+        <div style="font-size:8px;color:var(--ink-light);">1</div>
+        <div style="font-size:8px;color:var(--ink-light);">2</div>
+        <div style="font-size:8px;color:var(--ink-light);">3</div>
+        <div style="font-size:8px;color:var(--ink-light);">4</div>
+        <div style="font-size:8px;color:var(--ink-light);">5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEITIÇOS -->
+  <div class="section-title">Feitiços Conhecidos</div>
+
+  <!-- Column headers for spells -->
+  <div style="display:grid;grid-template-columns:1fr 44px 44px 44px 44px;gap:4px;margin-bottom:3px;padding:0 2px 0 9px;">
+    <div style="font-family:'Cinzel',serif;font-size:6.5px;color:var(--rule);letter-spacing:0.1em;text-transform:uppercase;">Nome do Feitiço</div>
+    <div style="font-family:'Cinzel',serif;font-size:6.5px;color:var(--rule);letter-spacing:0.08em;text-align:center;text-transform:uppercase;">Forma + Dom.</div>
+    <div style="font-family:'Cinzel',serif;font-size:6.5px;color:var(--rule);letter-spacing:0.08em;text-align:center;text-transform:uppercase;">Grau</div>
+    <div style="font-family:'Cinzel',serif;font-size:6.5px;color:var(--rule);letter-spacing:0.08em;text-align:center;text-transform:uppercase;">Mana / AP</div>
+    <div style="font-family:'Cinzel',serif;font-size:6.5px;color:var(--rule);letter-spacing:0.08em;text-align:center;text-transform:uppercase;">Sustentado?</div>
+  </div>
+
+  <!-- 8 spell slots -->
+  <div style="margin-bottom:8px;">
+    <!-- Spell slot -->
+    <div class="spell-full" style="margin-bottom:5px;">
+      <div class="spell-full-top">
+        <div>
+          <span class="spell-label">Nome</span>
+          <div style="border-bottom:1px solid var(--rule);height:14px;"></div>
+        </div>
+        <div style="text-align:center;">
+          <span class="spell-label" style="text-align:center;">F + D</span>
+          <div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+        </div>
+        <div style="text-align:center;">
+          <span class="spell-label" style="text-align:center;">Grau</span>
+          <div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+        </div>
+        <div style="text-align:center;">
+          <span class="spell-label" style="text-align:center;">Mana/AP</span>
+          <div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+        </div>
+        <div style="text-align:center;">
+          <span class="spell-label" style="text-align:center;">Hold?</span>
+          <div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div>
+        </div>
+      </div>
+      <div class="spell-full-bottom">
+        <div>
+          <span class="spell-label">Efeito</span>
+          <div style="border-bottom:1px solid var(--rule-light);height:13px;"></div>
+        </div>
+        <div>
+          <span class="spell-label">Estilo / Narrativa</span>
+          <div style="border-bottom:1px solid var(--rule-light);height:13px;"></div>
+        </div>
+      </div>
+    </div>
+    <!-- repeat x7 -->
+    <div class="spell-full" style="margin-bottom:5px;">
+      <div class="spell-full-top">
+        <div><span class="spell-label">Nome</span><div style="border-bottom:1px solid var(--rule);height:14px;"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">F + D</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Grau</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Mana/AP</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Hold?</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+      </div>
+      <div class="spell-full-bottom">
+        <div><span class="spell-label">Efeito</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+        <div><span class="spell-label">Estilo / Narrativa</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+      </div>
+    </div>
+    <div class="spell-full" style="margin-bottom:5px;">
+      <div class="spell-full-top">
+        <div><span class="spell-label">Nome</span><div style="border-bottom:1px solid var(--rule);height:14px;"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">F + D</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Grau</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Mana/AP</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Hold?</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+      </div>
+      <div class="spell-full-bottom">
+        <div><span class="spell-label">Efeito</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+        <div><span class="spell-label">Estilo / Narrativa</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+      </div>
+    </div>
+    <div class="spell-full" style="margin-bottom:5px;">
+      <div class="spell-full-top">
+        <div><span class="spell-label">Nome</span><div style="border-bottom:1px solid var(--rule);height:14px;"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">F + D</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Grau</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Mana/AP</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Hold?</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+      </div>
+      <div class="spell-full-bottom">
+        <div><span class="spell-label">Efeito</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+        <div><span class="spell-label">Estilo / Narrativa</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+      </div>
+    </div>
+    <div class="spell-full" style="margin-bottom:5px;">
+      <div class="spell-full-top">
+        <div><span class="spell-label">Nome</span><div style="border-bottom:1px solid var(--rule);height:14px;"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">F + D</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Grau</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Mana/AP</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Hold?</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+      </div>
+      <div class="spell-full-bottom">
+        <div><span class="spell-label">Efeito</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+        <div><span class="spell-label">Estilo / Narrativa</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+      </div>
+    </div>
+    <div class="spell-full" style="margin-bottom:5px;">
+      <div class="spell-full-top">
+        <div><span class="spell-label">Nome</span><div style="border-bottom:1px solid var(--rule);height:14px;"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">F + D</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Grau</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Mana/AP</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Hold?</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+      </div>
+      <div class="spell-full-bottom">
+        <div><span class="spell-label">Efeito</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+        <div><span class="spell-label">Estilo / Narrativa</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+      </div>
+    </div>
+    <div class="spell-full" style="margin-bottom:5px;">
+      <div class="spell-full-top">
+        <div><span class="spell-label">Nome</span><div style="border-bottom:1px solid var(--rule);height:14px;"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">F + D</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Grau</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Mana/AP</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Hold?</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+      </div>
+      <div class="spell-full-bottom">
+        <div><span class="spell-label">Efeito</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+        <div><span class="spell-label">Estilo / Narrativa</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+      </div>
+    </div>
+    <div class="spell-full" style="margin-bottom:0;">
+      <div class="spell-full-top">
+        <div><span class="spell-label">Nome</span><div style="border-bottom:1px solid var(--rule);height:14px;"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">F + D</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Grau</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Mana/AP</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+        <div><span class="spell-label" style="text-align:center;display:block;">Hold?</span><div style="height:14px;border:1px solid var(--rule);background:var(--parchment-dark);"></div></div>
+      </div>
+      <div class="spell-full-bottom">
+        <div><span class="spell-label">Efeito</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+        <div><span class="spell-label">Estilo / Narrativa</span><div style="border-bottom:1px solid var(--rule-light);height:13px;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RITUAIS & NOTAS -->
+  <div class="section-title">Notas de Rituais &amp; Feitiços em Desenvolvimento</div>
+  <div class="lined-area">
+    <div class="text-line"></div>
+    <div class="text-line"></div>
+    <div class="text-line"></div>
+    <div class="text-line"></div>
+    <div class="text-line"></div>
+    <div class="text-line"></div>
+    <div class="text-line"></div>
+    <div class="text-line"></div>
+  </div>
+
+  <div class="page-footer">
+    <span>D10/0 System v0.80</span>
+    <span>✦ &nbsp; Ficha do Conjurador &nbsp; ✦</span>
+    <span>Página 2 · Grimório</span>
+  </div>
+
+</div><!-- end page 2 -->
+
+</body>
+</html>

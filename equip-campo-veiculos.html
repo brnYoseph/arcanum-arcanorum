@@ -4,214 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Equipamento de Campo & Veículos — D10/0</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap');
-
-:root {
-  --bg:           #0a0b0d;
-  --surface:      #111318;
-  --panel:        #161920;
-  --border:       #22262f;
-  --border-hi:    #353c4a;
-  --text:         #c8cdd8;
-  --text-dim:     #5a6070;
-  --text-mono:    #7a9a7a;
-  --accent:       #c9a84c;
-  --accent-dim:   #5a4a20;
-  --red:          #c03838;
-  --silver:       #8fa3bb;
-
-  --cat-inv:      #5a7a6a;   /* investigação */
-  --cat-tech:     #4a6a8a;   /* tecnologia */
-  --cat-medical:  #7a5a5a;   /* médico */
-  --cat-occult:   #6a5a8a;   /* ocultismo */
-  --cat-vehicle:  #7a7a4a;   /* veículos */
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 15px;
-  line-height: 1.5;
-  min-height: 100vh;
-}
-
-body::after {
-  content: '';
-  position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background: repeating-linear-gradient(
-    0deg, transparent, transparent 2px,
-    rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px
-  );
-}
-
-.page { position: relative; z-index: 1; max-width: 1060px; margin: 0 auto; padding: 0 20px 60px; }
-
-/* ── HEADER ── */
-header {
-  border-bottom: 1px solid var(--border);
-  padding: 36px 0 24px;
-  margin-bottom: 32px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  gap: 24px;
-}
-
-.doc-tag {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; color: var(--accent); letter-spacing: 0.2em;
-  text-transform: uppercase; margin-bottom: 8px; opacity: 0.7;
-}
-
-h1 {
-  font-size: clamp(26px, 4vw, 44px);
-  font-weight: 700; letter-spacing: 0.04em;
-  text-transform: uppercase; color: #e8e4dc; line-height: 1;
-}
-h1 span { color: var(--accent); }
-
-.header-meta {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; color: var(--text-dim);
-  letter-spacing: 0.15em; line-height: 2; text-align: right;
-}
-
-/* ── CATEGORY ── */
-.cat-section { margin-bottom: 48px; }
-
-.cat-header {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 16px; padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-
-.cat-pip { width: 8px; height: 8px; flex-shrink: 0; }
-.cat-title { font-size: 11px; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase; flex: 1; }
-.cat-count { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); }
-
-.cat-inv     .cat-pip  { background: var(--cat-inv); }
-.cat-inv     .cat-title { color: var(--cat-inv); }
-.cat-tech    .cat-pip  { background: var(--cat-tech); }
-.cat-tech    .cat-title { color: var(--cat-tech); }
-.cat-medical .cat-pip  { background: var(--cat-medical); }
-.cat-medical .cat-title { color: var(--cat-medical); }
-.cat-occult  .cat-pip  { background: var(--cat-occult); }
-.cat-occult  .cat-title { color: var(--cat-occult); }
-.cat-vehicle .cat-pip  { background: var(--cat-vehicle); }
-.cat-vehicle .cat-title { color: var(--cat-vehicle); }
-
-/* ── TABLE ── */
-.eq-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.eq-table thead tr { background: var(--surface); }
-.eq-table th {
-  font-family: 'Share Tech Mono', monospace; font-size: 9px;
-  letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
-  text-align: left; padding: 8px 12px;
-  border-bottom: 1px solid var(--border-hi); white-space: nowrap; font-weight: 400;
-}
-.eq-table th.r { text-align: right; }
-.eq-table th.c { text-align: center; }
-.eq-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-.eq-table tr:last-child td { border-bottom: none; }
-.eq-table tr:hover td { background: rgba(255,255,255,0.02); }
-tr.featured td { background: rgba(201,168,76,0.03); }
-
-.item-name { font-size: 15px; font-weight: 600; color: #ddd8cc; letter-spacing: 0.02em; }
-.item-sub { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); margin-top: 1px; }
-
-td.mono { font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--text-mono); }
-td.r { text-align: right; }
-td.c { text-align: center; font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--text-mono); }
-td.cost { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--accent); text-align: right; white-space: nowrap; }
-td.effect { font-size: 12px; color: var(--silver); font-style: italic; }
-td.notes { font-size: 12px; color: var(--text-dim); font-style: italic; max-width: 200px; }
-
-.skill-tag {
-  display: inline-block; font-family: 'Share Tech Mono', monospace;
-  font-size: 9px; padding: 1px 5px;
-  border: 1px solid var(--border-hi); color: var(--text-dim);
-  background: var(--surface); white-space: nowrap;
-}
-.skill-tag.hi { border-color: var(--accent-dim); color: var(--accent); }
-
-/* ── VEHICLE TABLE ── */
-.veh-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.veh-table thead tr { background: var(--surface); }
-.veh-table th {
-  font-family: 'Share Tech Mono', monospace; font-size: 9px;
-  letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim);
-  text-align: left; padding: 8px 10px;
-  border-bottom: 1px solid var(--border-hi); white-space: nowrap; font-weight: 400;
-}
-.veh-table th.c { text-align: center; }
-.veh-table th.r { text-align: right; }
-.veh-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-.veh-table tr:last-child td { border-bottom: none; }
-.veh-table tr:hover td { background: rgba(255,255,255,0.02); }
-.veh-table tr.featured td { background: rgba(201,168,76,0.03); }
-
-td.vstat { font-family: 'Share Tech Mono', monospace; font-size: 12px; text-align: center; color: var(--text-mono); }
-td.vcost { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--accent); text-align: right; white-space: nowrap; }
-td.vnotes { font-size: 12px; color: var(--text-dim); font-style: italic; }
-
-.veh-type {
-  display: inline-block; font-family: 'Share Tech Mono', monospace;
-  font-size: 9px; padding: 2px 6px; margin-bottom: 3px;
-  text-transform: uppercase; letter-spacing: 0.1em;
-}
-.type-moto  { border: 1px solid #5a7a3a; color: #7aaa5a; background: rgba(90,122,58,0.08); }
-.type-car   { border: 1px solid #3a5a7a; color: #5a8aaa; background: rgba(58,90,122,0.08); }
-.type-suv   { border: 1px solid #6a5a2a; color: #aa8a4a; background: rgba(106,90,42,0.08); }
-.type-truck { border: 1px solid #7a4a2a; color: #aa6a4a; background: rgba(122,74,42,0.08); }
-.type-van   { border: 1px solid #5a3a7a; color: #8a5aaa; background: rgba(90,58,122,0.08); }
-.type-spec  { border: 1px solid #7a2a2a; color: #aa4a4a; background: rgba(122,42,42,0.1); }
-
-/* stat bar */
-.stat-bar { display: flex; gap: 2px; align-items: center; justify-content: center; }
-.bar-pip { width: 8px; height: 8px; background: var(--border-hi); }
-.bar-pip.on { background: var(--cat-vehicle); }
-.bar-pip.on.hi { background: var(--accent); }
-
-/* ── RULE ── */
-.rule { height: 1px; background: var(--border); margin: 0 0 40px; }
-
-/* ── FOOTNOTES ── */
-.footnotes {
-  margin-top: 48px; padding-top: 20px;
-  border-top: 1px solid var(--border);
-  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
-}
-.fn-title {
-  font-family: 'Share Tech Mono', monospace; font-size: 9px;
-  letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--accent-dim); margin-bottom: 10px;
-  padding-bottom: 6px; border-bottom: 1px solid var(--border);
-}
-.fn-row { display: flex; gap: 10px; margin-bottom: 5px; font-size: 13px; align-items: baseline; }
-.fn-key { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent); min-width: 80px; flex-shrink: 0; }
-.fn-val { color: var(--text-dim); }
-
-@media (max-width: 700px) {
-  .footnotes { grid-template-columns: 1fr; }
-  header { grid-template-columns: 1fr; }
-  .header-meta { text-align: left; }
-  td.notes, td.vnotes { display: none; }
-}
-</style>
+<link rel="stylesheet" href="styles/equip.css">
 </head>
-<body>
+<body class="equip-page">
+<nav class="aa-nav">
+  <div class="aa-nav-inner">
+    <a class="aa-nav-logo" href="index.html">&#9670; AA</a>
+    <div class="aa-nav-links">
+      <a href="codex.html">Codex</a>
+      <a href="ficha-conjurador.html">Ficha do Conjurador</a>
+      <a href="equip-armas-armaduras.html">Arsenal</a>
+      <a href="equip-municao-acessorios.html">Munição &amp; Acessórios</a>
+      <a href="equip-campo-veiculos.html" class="active">Campo &amp; Veículos</a>
+    </div>
+  </div>
+</nav>
 <div class="page">
 
   <header>
     <div>
       <div class="doc-tag">D10/0 System · Arcanum Arcanorum · Suplemento de Campo — Vol. III</div>
       <h1>Equipamento de Campo <span>&amp;</span> Veículos</h1>
-      <div style="font-size:13px;color:var(--text-dim);margin-top:6px;font-style:italic;">
+      <div style="font-size:16px;color:var(--text-dim);margin-top:6px;font-style:italic;">
         Itens para investigadores do arcano · Veículos com estatísticas D10/0 · Preços FIPE mai/2026
       </div>
     </div>
@@ -550,7 +364,7 @@ td.vnotes { font-size: 12px; color: var(--text-dim); font-style: italic; }
     </div>
 
     <!-- stat legend -->
-    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:0.1em;">
+    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:16px;font-family:'Share Tech Mono',monospace;font-size:16px;color:var(--text-dim);letter-spacing:0.1em;">
       <span>VEL = Velocidade máx. (km/h)</span>
       <span>AG = Bônus de Agilidade do veículo</span>
       <span>ARM = Blindagem (Ajuste de dano)</span>
